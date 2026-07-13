@@ -1,16 +1,10 @@
-import { useState } from 'react'
-import './App.css'
+import MainLayout from '@/ui/main-layout/MainLayout'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center"></section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <MainLayout>
+      <h1>Courier onboarding</h1>
+    </MainLayout>
   )
 }
 
