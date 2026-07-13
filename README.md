@@ -123,12 +123,6 @@ things Oxlint can't yet (like unhandled promises).We lean on it in CI.
 nothing runs twice. Prettier owns formatting (`eslint-config-prettier` is last,
 so lint rules stay out of its way).
 
-### Editor formatting
-
-`.vscode/settings.json` turns on format-on-save (Prettier + ESLint autofix) and
-`.vscode/extensions.json` recommends the extensions. Both are committed so
-everyone gets the same setup.
-
 ## Tooling
 
 - **Oxlint** + **ESLint** for linting (see [Setup config](#setup-config))
