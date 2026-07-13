@@ -2,6 +2,32 @@
 
 Courier onboarding exercise. React + TypeScript + Vite.
 
+## Tech choices
+
+A wizard has two kinds of state. There is the form you are filling in right now,
+and there is the whole application that has to survive while you move between
+steps. I keep those two things separate.
+
+**React Hook Form** runs each step's form. It is the usual choice for forms in
+React and it handles the fiddly parts for me: validation, tracking which fields
+were touched, keeping renders cheap, and moving focus to the first error. It
+also lets me set an error on a field by its name, which fits this task well,
+because the server replies with names like `documents.drivers_license.number`
+that point straight at a field.
+
+**Zustand** holds everything that lives above a single step: the data from all
+three steps, the step you are on, and the submit status. I like it here because
+it is a global store with almost no setup and no providers to wrap the app in.
+Keeping this state outside the form is what makes two things simple. When the
+server returns a 503 the user can just retry and nothing is lost, and resuming a
+saved application is only a matter of filling the store and jumping to the first
+unfinished step. Redux would be too much for this. Zustand is the right size.
+
+**Yup** (through `@hookform/resolvers`) says what a valid step looks like:
+required fields, a real email, at least 18 years old. The rules live in a schema
+instead of inside the components, and the document step builds its schema from the
+vehicle you picked, so the validation always matches what is on screen.
+
 ## Requirements
 
 - Node.js 20+
@@ -96,12 +122,6 @@ things Oxlint can't yet (like unhandled promises).We lean on it in CI.
 `eslint-plugin-oxlint` turns off the ESLint rules Oxlint already handles, so
 nothing runs twice. Prettier owns formatting (`eslint-config-prettier` is last,
 so lint rules stay out of its way).
-
-### Editor formatting
-
-`.vscode/settings.json` turns on format-on-save (Prettier + ESLint autofix) and
-`.vscode/extensions.json` recommends the extensions. Both are committed so
-everyone gets the same setup.
 
 ## Tooling
 

@@ -17,11 +17,13 @@ dist-ssr
 
 # Editor directories and files
 .vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+/.vscode
 .idea
 .DS_Store
 *.sw?
 
 # TypeScript
 *.tsbuildinfo
+
+# Local working note
+/artifacts
