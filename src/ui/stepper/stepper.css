@@ -1,0 +1,111 @@
+@import '../variables.css';
+
+.stepper {
+  --stepper-accent: var(--dt-color-interactive-brand, #ff8000);
+  --stepper-on-accent: var(--dt-color-content-interactive-primary-inverse, #fff);
+  --stepper-muted: var(--dt-color-content-disabled, #9aa0a6);
+  --stepper-line: var(--dt-color-container-border, #d9d9d9);
+  --stepper-text: var(--dt-color-content-default, #1a1a1a);
+
+  margin-block-end: var(--dt-spacing-f);
+}
+
+.stepper__list {
+  display: flex;
+  gap: var(--dt-spacing-b);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepper__item {
+  flex: 1 1 0;
+}
+
+.stepper__step {
+  display: flex;
+  align-items: center;
+  gap: var(--dt-spacing-b);
+  width: 100%;
+  padding: var(--dt-spacing-b) var(--dt-spacing-c);
+  border: 0;
+  border-radius: var(--dt-radius-c, 8px);
+  background: transparent;
+  color: var(--stepper-muted);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.stepper__step:disabled {
+  cursor: not-allowed;
+}
+
+.stepper__step:focus-visible {
+  outline: 2px solid var(--stepper-accent);
+  outline-offset: 2px;
+}
+
+.stepper__marker {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stepper__label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+
+.stepper__step[data-active],
+.stepper__step[data-done] {
+  color: var(--stepper-text);
+}
+
+.stepper__step[data-active] .stepper__marker {
+  border-color: var(--stepper-accent);
+  color: var(--stepper-accent);
+}
+
+.stepper__step[data-done] .stepper__marker {
+  border-color: var(--stepper-accent);
+  background: var(--stepper-accent);
+  color: var(--stepper-on-accent);
+}
+
+.stepper__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (--mobile) {
+  .stepper__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .stepper__step {
+    justify-content: center;
+  }
+}
