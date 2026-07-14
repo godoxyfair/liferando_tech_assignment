@@ -28,30 +28,30 @@ describe('createStepperStore', () => {
   it('clamps navigation within bounds', () => {
     const store = createStepperStore(3)
     store.getState().backToStep()
-    expect(store.getState().step).toBe(0) // cannot go below 0
+    expect(store.getState().step).toBe(0)
 
     store.getState().nextStep()
     store.getState().nextStep()
     store.getState().nextStep()
-    expect(store.getState().step).toBe(2) // cannot exceed count - 1
+    expect(store.getState().step).toBe(2)
     expect(store.getState().maxReached).toBe(2)
   })
 
   it('refuses goToStep beyond the furthest reached', () => {
     const store = createStepperStore(3)
     store.getState().goToStep(2)
-    expect(store.getState().step).toBe(0) // blocked, never reached
+    expect(store.getState().step).toBe(0)
   })
 
   it('keeps a step reachable after navigating back (maxReached is monotonic)', () => {
     const store = createStepperStore(3)
-    store.getState().nextStep() // reach step 1
-    store.getState().nextStep() // reach step 2
-    store.getState().backToStep() // back to step 1
+    store.getState().nextStep()
+    store.getState().nextStep()
+    store.getState().backToStep()
     expect(store.getState().step).toBe(1)
-    expect(store.getState().maxReached).toBe(2) // not lowered
+    expect(store.getState().maxReached).toBe(2)
 
-    store.getState().goToStep(2) // still reachable
+    store.getState().goToStep(2)
     expect(store.getState().step).toBe(2)
   })
 

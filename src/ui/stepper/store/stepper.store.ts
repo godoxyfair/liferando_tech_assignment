@@ -4,7 +4,6 @@ import type { StoreApi } from 'zustand'
 export interface StepperState {
   step: number
   count: number
-  /** Furthest step ever reached */
   maxReached: number
   nextStep: () => void
   backToStep: () => void
@@ -30,6 +29,7 @@ export function createStepperStore(count: number): StepperStore {
     nextStep: () =>
       set((state) => {
         const step = clamp(state.step + 1, state.count)
+
         return { step, maxReached: Math.max(state.maxReached, step) }
       }),
     backToStep: () =>

@@ -1,5 +1,3 @@
-// Server contract for the Courier Onboarding mock API (public/server.mjs).
-
 export type VehicleTypeId = 'bicycle' | 'ebike' | 'scooter' | 'car'
 
 export type DocumentTypeId =
@@ -55,7 +53,6 @@ export interface SubmitResponse {
   applicationId: string
 }
 
-// 422/409 error bodies carry dot-path field errors, e.g.
 export interface ServerFieldError {
   field: string
   message: string

@@ -8,7 +8,6 @@ export interface StepperApi {
   count: number
   isFirst: boolean
   isLast: boolean
-  /** Furthest step ever reached */
   maxReached: number
   canGoTo: (step: number) => boolean
   next: () => void

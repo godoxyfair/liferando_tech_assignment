@@ -1,36 +1,62 @@
 import { createStore } from 'zustand/vanilla'
 import type { OnboardingConfig } from '../onboarding.types'
 
-export type OnboardingStatus =
-  | 'idle'
-  | 'loading' 
-  | 'ready' 
-  | 'submitting'
-  | 'submitted'
-  | 'error' 
+export enum ConfigStatus {
+  Idle = 'idle',
+  Loading = 'loading',
+  Ready = 'ready',
+  Error = 'error',
+}
+
+export enum SubmitStatus {
+  Idle = 'idle',
+  Submitting = 'submitting',
+  Submitted = 'submitted',
+  Error = 'error',
+}
 
 export interface OnboardingState {
   config: OnboardingConfig | null
-  status: OnboardingStatus
+  configStatus: ConfigStatus
+  configError: string | null
+  submitStatus: SubmitStatus
+  submitError: string | null
   applicationId: string | null
-  error: string | null
+
+  setConfigStatus: (status: ConfigStatus, error?: string | null) => void
   setConfig: (config: OnboardingConfig) => void
-  setStatus: (status: OnboardingStatus, error?: string | null) => void
+  setSubmitStatus: (status: SubmitStatus, error?: string | null) => void
   setApplicationId: (id: string) => void
   reset: () => void
 }
 
 const createInitialState = () => ({
-  config: null as OnboardingConfig | null,
-  status: 'idle' as OnboardingStatus,
-  applicationId: null as string | null,
-  error: null as string | null,
+  config: null,
+  configStatus: ConfigStatus.Idle,
+  configError: null,
+  submitStatus: SubmitStatus.Idle,
+  submitError: null,
+  applicationId: null,
 })
 
 export const onboardingStore = createStore<OnboardingState>()((set) => ({
   ...createInitialState(),
-  setConfig: (config) => set({ config, status: 'ready' }),
-  setStatus: (status, error = null) => set({ status, error }),
-  setApplicationId: (applicationId) => set({ applicationId }),
+
+  setConfigStatus: (configStatus, configError = null) =>
+    set({ configStatus, configError }),
+
+  setConfig: (config) =>
+    set({ config, configStatus: ConfigStatus.Ready, configError: null }),
+
+  setSubmitStatus: (submitStatus, submitError = null) =>
+    set({ submitStatus, submitError }),
+
+  setApplicationId: (applicationId) =>
+    set({
+      applicationId,
+      submitStatus: SubmitStatus.Submitted,
+      submitError: null,
+    }),
+
   reset: () => set(createInitialState()),
 }))

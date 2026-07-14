@@ -6,7 +6,7 @@ import type {
   ServerErrorBody,
   SubmitPayload,
   SubmitResponse,
-} from './onboarding.types'
+} from '../../modules/onboarding-form/onboarding.types'
 
 const ENDPOINT = '/onboarding'
 
@@ -19,16 +19,15 @@ export function isOnboardingApiError(
 }
 
 export class OnboardingApi {
-  // GET /onboarding/config vehicle types, document metadata, city list.
   async getConfig(signal?: AbortSignal): Promise<OnboardingConfig> {
     const response = await apiRequest<void, OnboardingConfig>(
       `${ENDPOINT}/config`,
       { method: 'GET', signal },
     )
+
     return response.data
   }
 
-  // GET /onboarding/applications/:id resume a saved application.
   async getApplication(
     id: string,
     signal?: AbortSignal,
@@ -37,11 +36,10 @@ export class OnboardingApi {
       `${ENDPOINT}/applications/${encodeURIComponent(id)}`,
       { method: 'GET', signal },
     )
+
     return response.data
   }
 
-  // POST /onboarding/applications/:id/submit final submit.
-  // Rejects on 422 (field errors), 409 (duplicate licence), 503 (transient).
   async submitApplication(
     id: string,
     payload: SubmitPayload,
@@ -51,6 +49,7 @@ export class OnboardingApi {
       `${ENDPOINT}/applications/${encodeURIComponent(id)}/submit`,
       { method: 'POST', data: payload, signal },
     )
+
     return response.data
   }
 }

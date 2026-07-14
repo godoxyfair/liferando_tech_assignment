@@ -1,0 +1,29 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-a, 0.25rem);
+  margin-block-end: var(--dt-spacing-d, 1rem);
+}
+
+.field pie-text-input,
+.field pie-select {
+  --dt-spacing-a: var(--dt-spacing-b, 0.5rem);
+}
+
+.field__native-input {
+  padding: var(--dt-spacing-c, 0.75rem) var(--dt-spacing-d, 1rem);
+  font: inherit;
+  color: var(--dt-color-content-default, #1a1a1a);
+  background: var(--dt-color-container-default, #fff);
+  border: 1px solid var(--dt-color-container-border, #8f949c);
+  border-radius: var(--dt-radius-c, 8px);
+}
+
+.field__native-input:focus-visible {
+  outline: 2px solid var(--dt-color-interactive-brand, #ff8000);
+  outline-offset: 1px;
+}
+
+.field__native-input[data-status='error'] {
+  border-color: var(--dt-color-support-error, #c4001e);
+}

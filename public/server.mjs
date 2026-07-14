@@ -26,7 +26,9 @@ const realCities = [
   'Faultown', // Faultown is a deliberate failure case
 ]
 const cities = [...realCities]
-for (let i = 1; i <= 1500; i++) cities.push(`Teststadt ${i}`)
+for (let i = 1; i <= 1500; i++) {
+  cities.push(`Teststadt ${i}`)
+}
 
 const config = {
   vehicleTypes: [
@@ -89,11 +91,15 @@ function send(res, status, body) {
 
 function ageFrom(dob) {
   const d = new Date(dob)
-  if (isNaN(d)) return NaN
+  if (isNaN(d)) {
+    return NaN
+  }
   const now = new Date()
   let age = now.getFullYear() - d.getFullYear()
   const m = now.getMonth() - d.getMonth()
-  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) age--
+  if (m < 0 || (m === 0 && now.getDate() < d.getDate())) {
+    age--
+  }
   return age
 }
 
@@ -123,7 +129,9 @@ function validateSubmission(payload) {
 }
 
 const server = createServer((req, res) => {
-  if (req.method === 'OPTIONS') return send(res, 204)
+  if (req.method === 'OPTIONS') {
+    return send(res, 204)
+  }
 
   const url = new URL(req.url, `http://localhost:${PORT}`)
   const path = url.pathname
@@ -138,7 +146,9 @@ const server = createServer((req, res) => {
   if (req.method === 'GET' && getMatch) {
     const id = decodeURIComponent(getMatch[1])
     const app = savedApplications[id]
-    if (!app) return send(res, 404, { message: 'No saved application found.' })
+    if (!app) {
+      return send(res, 404, { message: 'No saved application found.' })
+    }
     return send(res, 200, app)
   }
 
@@ -179,7 +189,9 @@ const server = createServer((req, res) => {
         })
       }
 
-      if (errors.length) return send(res, 422, { errors })
+      if (errors.length) {
+        return send(res, 422, { errors })
+      }
 
       return send(res, 200, {
         status: 'submitted',

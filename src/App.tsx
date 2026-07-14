@@ -1,11 +1,7 @@
-import MainLayout from '@/ui/main-layout/MainLayout'
+import { OnboardingPage } from '@/pages/onboarding-page/onboarding-page.component'
 
 function App() {
-  return (
-    <MainLayout>
-      <h1>Courier onboarding</h1>
-    </MainLayout>
-  )
+  return <OnboardingPage />
 }
 
 export default App

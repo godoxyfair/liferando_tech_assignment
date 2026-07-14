@@ -1,0 +1,17 @@
+.step {
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.step__legend {
+  padding: 0;
+  margin-block-end: var(--dt-spacing-d, 1rem);
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.step__hint {
+  color: var(--dt-color-content-subtle, #6a6a6a);
+}

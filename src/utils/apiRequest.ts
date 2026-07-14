@@ -45,6 +45,7 @@ export async function apiRequest<D, T = void, Q = Record<string, never>>(
     if (axios.isAxiosError(error)) {
       throw error
     }
+
     throw new AxiosError(String(error))
   }
 }

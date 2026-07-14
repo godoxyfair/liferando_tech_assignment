@@ -8,8 +8,6 @@ import { browserslistToTargets } from 'lightningcss'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // downlevels range syntax (width < 768px) to (max-width) for the browsers
-  // in package.json "browserslist" — so old Safari/Chrome still match.
   css: {
     transformer: 'lightningcss',
     lightningcss: {

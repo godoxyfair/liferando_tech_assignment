@@ -1,0 +1,29 @@
+.onboarding {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-e, 1.5rem);
+}
+
+.onboarding__title {
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.onboarding__nav {
+  display: flex;
+  gap: var(--dt-spacing-c, 0.75rem);
+  justify-content: flex-end;
+  margin-block-start: var(--dt-spacing-d, 1rem);
+}
+
+.onboarding__nav > :first-child:not(:only-child) {
+  margin-inline-end: auto;
+}
+
+.onboarding__status,
+.onboarding__success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-d, 1rem);
+  align-items: flex-start;
+}
