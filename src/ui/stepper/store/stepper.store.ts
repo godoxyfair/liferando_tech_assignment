@@ -4,11 +4,11 @@ import type { StoreApi } from 'zustand'
 export interface StepperState {
   step: number
   count: number
-  completed: boolean[]
+  /** Furthest step ever reached */
+  maxReached: number
   nextStep: () => void
   backToStep: () => void
   goToStep: (step: number) => void
-  completeStep: (step?: number) => void
   reset: () => void
 }
 
@@ -17,30 +17,29 @@ export type StepperStore = StoreApi<StepperState>
 const clamp = (step: number, count: number) =>
   Math.max(0, Math.min(count - 1, step))
 
-export function canGoToStep(completed: boolean[], step: number): boolean {
-  return step === 0 || completed.slice(0, step).every(Boolean)
+/** A step is reachable once it has been unlocked by reaching it at least once */
+export function canReachStep(maxReached: number, step: number): boolean {
+  return step <= maxReached
 }
 
 export function createStepperStore(count: number): StepperStore {
   return createStore<StepperState>()((set) => ({
     step: 0,
     count,
-    completed: Array(count).fill(false),
-    nextStep: () => set((s) => ({ step: clamp(s.step + 1, s.count) })),
-    backToStep: () => set((s) => ({ step: clamp(s.step - 1, s.count) })),
-    goToStep: (step) =>
-      set((s) =>
-        canGoToStep(s.completed, step) ? { step: clamp(step, s.count) } : s,
-      ),
-    completeStep: (step) =>
-      set((s) => {
-        const i = step ?? s.step
-        if (s.completed[i]) return s
-        const completed = s.completed.slice()
-        completed[i] = true
-        return { completed }
+    maxReached: 0,
+    nextStep: () =>
+      set((state) => {
+        const step = clamp(state.step + 1, state.count)
+        return { step, maxReached: Math.max(state.maxReached, step) }
       }),
-    reset: () =>
-      set((s) => ({ step: 0, completed: Array(s.count).fill(false) })),
+    backToStep: () =>
+      set((state) => ({ step: clamp(state.step - 1, state.count) })),
+    goToStep: (step) =>
+      set((state) =>
+        canReachStep(state.maxReached, step)
+          ? { step: clamp(step, state.count) }
+          : state,
+      ),
+    reset: () => set({ step: 0, maxReached: 0 }),
   }))
 }
