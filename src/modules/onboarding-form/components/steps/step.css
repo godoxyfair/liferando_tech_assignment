@@ -13,5 +13,5 @@
 }
 
 .step__hint {
-  color: var(--dt-color-content-subtle, #6a6a6a);
+  color: var(--dt-color-content-subdued, #6a6a6a);
 }

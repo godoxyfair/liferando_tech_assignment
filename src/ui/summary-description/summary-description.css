@@ -8,7 +8,7 @@
 }
 
 .summary-description__term {
-  color: var(--dt-color-content-subtle, #9ca3af);
+  color: var(--dt-color-content-subdued, #9ca3af);
 }
 
 .summary-description__description {
