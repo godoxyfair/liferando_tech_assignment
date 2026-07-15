@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import type { FieldErrors, Path } from 'react-hook-form'
 import { useStore } from '@/utils/useStore'
 import { useStepper } from '@/ui/stepper'
 import { onboardingFormService } from '../service/onboarding.form-service'
+import { SubmitStatus } from '../store/onboarding.store'
 import type { Step } from '../onboarding.constants'
 import { STEP_SECTIONS } from '../validation'
 import { firstErrorFieldPath, mapServerErrorToStep } from '../utils/errors'
@@ -12,7 +13,7 @@ import type { OnboardingConfig, ServerFieldError } from '../onboarding.types'
 import type { OnboardingFormValues } from '../onboarding.form-model'
 
 export function useOnboardingSubmit(config: OnboardingConfig) {
-  const { handleSubmit, setError, setFocus } =
+  const { handleSubmit, setError, setFocus, watch } =
     useFormContext<OnboardingFormValues>()
 
   const { goTo, step } = useStepper()
@@ -22,6 +23,7 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
   )
 
   const pendingFocusField = useRef<Path<OnboardingFormValues> | null>(null)
+  const [isRetryableError, setIsRetryableError] = useState(false)
 
   useEffect(() => {
     const fieldToFocus = pendingFocusField.current
@@ -33,6 +35,19 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
     pendingFocusField.current = null
     setFocus(fieldToFocus)
   }, [step, setFocus])
+
+  useEffect(() => {
+    const subscription = watch(() => {
+      const { submitStatus: currentStatus } =
+        onboardingFormService.store.getState()
+
+      if (currentStatus === SubmitStatus.Error) {
+        onboardingFormService.clearSubmitError()
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [watch])
 
   const applyFieldErrors = (errors: ServerFieldError[]) => {
     for (const { field, message } of errors) {
@@ -66,6 +81,8 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
       toSubmitPayload(values, config),
     )
 
+    setIsRetryableError(result.status === 'error')
+
     if (result.status === 'field-error') {
       applyFieldErrors(result.errors)
     }
@@ -91,6 +108,7 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
     onSubmit: () => handleSubmit(onValid, onInvalid)(),
     status: submitStatus,
     error: submitError,
+    isRetryableError,
     applicationId,
   }
 }

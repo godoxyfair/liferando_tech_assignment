@@ -41,6 +41,7 @@ export function FormContent({
     onSubmit,
     status: submitStatus,
     error: submitError,
+    isRetryableError,
     applicationId,
   } = useOnboardingSubmit(config)
 
@@ -111,6 +112,12 @@ export function FormContent({
             variant="error"
             isOpen
             heading="We couldn't submit your application"
+            leadingAction={isRetryableError ? { text: 'Try again' } : undefined}
+            onPieNotificationLeadingActionClick={() => {
+              if (!isSubmitting) {
+                void onSubmit()
+              }
+            }}
           >
             {submitError}
           </PieNotification>
