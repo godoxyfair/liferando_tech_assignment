@@ -1,5 +1,5 @@
 import { createStore } from 'zustand/vanilla'
-import type { OnboardingConfig } from '../onboarding.types'
+import type { OnboardingApplication, OnboardingConfig } from '../onboarding.types'
 
 export enum ConfigStatus {
   Idle = 'idle',
@@ -15,6 +15,13 @@ export enum SubmitStatus {
   Error = 'error',
 }
 
+export enum ResumeStatus {
+  Idle = 'idle',
+  Loading = 'loading',
+  Ready = 'ready',
+  Error = 'error',
+}
+
 export interface OnboardingState {
   config: OnboardingConfig | null
   configStatus: ConfigStatus
@@ -22,11 +29,16 @@ export interface OnboardingState {
   submitStatus: SubmitStatus
   submitError: string | null
   applicationId: string | null
+  resumeStatus: ResumeStatus
+  resumeError: string | null
+  prefillApplication: OnboardingApplication | null
 
   setConfigStatus: (status: ConfigStatus, error?: string | null) => void
   setConfig: (config: OnboardingConfig) => void
   setSubmitStatus: (status: SubmitStatus, error?: string | null) => void
   setApplicationId: (id: string) => void
+  setResumeStatus: (status: ResumeStatus, error?: string | null) => void
+  setPrefillApplication: (application: OnboardingApplication) => void
   reset: () => void
 }
 
@@ -37,6 +49,9 @@ const createInitialState = () => ({
   submitStatus: SubmitStatus.Idle,
   submitError: null,
   applicationId: null,
+  resumeStatus: ResumeStatus.Idle,
+  resumeError: null,
+  prefillApplication: null,
 })
 
 export const onboardingStore = createStore<OnboardingState>()((set) => ({
@@ -52,6 +67,16 @@ export const onboardingStore = createStore<OnboardingState>()((set) => ({
     set({ submitStatus, submitError }),
 
   setApplicationId: (applicationId) => set({ applicationId }),
+
+  setResumeStatus: (resumeStatus, resumeError = null) =>
+    set({ resumeStatus, resumeError }),
+
+  setPrefillApplication: (prefillApplication) =>
+    set({
+      prefillApplication,
+      resumeStatus: ResumeStatus.Ready,
+      resumeError: null,
+    }),
 
   reset: () => set(createInitialState()),
 }))

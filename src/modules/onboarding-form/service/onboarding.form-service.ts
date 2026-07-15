@@ -5,6 +5,7 @@ import {
 } from '@/api/onboarding-form/onboarding.service'
 import {
   ConfigStatus,
+  ResumeStatus,
   SubmitStatus,
   onboardingStore,
 } from '../store/onboarding.store'
@@ -19,6 +20,7 @@ export class OnboardingFormService {
   readonly store = onboardingStore
   private configController: AbortController | null = null
   private submitController: AbortController | null = null
+  private resumeController: AbortController | null = null
 
   async loadConfig(): Promise<void> {
     this.configController?.abort()
@@ -43,17 +45,46 @@ export class OnboardingFormService {
     }
   }
 
+  async loadResume(id: string): Promise<void> {
+    this.resumeController?.abort()
+    const controller = new AbortController()
+    this.resumeController = controller
+
+    const { setResumeStatus, setPrefillApplication } = this.store.getState()
+    setResumeStatus(ResumeStatus.Loading)
+
+    try {
+      const application = await onboardingApi.getApplication(
+        id,
+        controller.signal,
+      )
+
+      if (!controller.signal.aborted) {
+        setPrefillApplication(application)
+      }
+    } catch {
+      if (!controller.signal.aborted) {
+        setResumeStatus(
+          ResumeStatus.Error,
+          'We could not load your saved application. Continuing with a blank form.',
+        )
+      }
+    }
+  }
+
   async handleSubmit(payload: SubmitPayload): Promise<SubmitOutcome> {
     this.submitController?.abort()
     const controller = new AbortController()
     this.submitController = controller
 
-    const { setSubmitStatus, setApplicationId } = this.store.getState()
+    const { setSubmitStatus, setApplicationId, prefillApplication } =
+      this.store.getState()
+
     setSubmitStatus(SubmitStatus.Submitting)
 
     try {
       const result = await onboardingApi.submitApplication(
-        NEW_APPLICATION_ID,
+        prefillApplication?.applicationId ?? NEW_APPLICATION_ID,
         payload,
         controller.signal,
       )
@@ -113,6 +144,7 @@ export class OnboardingFormService {
   reset(): void {
     this.configController?.abort()
     this.submitController?.abort()
+    this.resumeController?.abort()
     this.store.getState().reset()
   }
 }

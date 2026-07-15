@@ -21,11 +21,14 @@ export function canReachStep(maxReached: number, step: number): boolean {
   return step <= maxReached
 }
 
-export function createStepperStore(count: number): StepperStore {
+export function createStepperStore(
+  count: number,
+  initialStep = 0,
+): StepperStore {
   return createStore<StepperState>()((set) => ({
-    step: 0,
+    step: initialStep,
     count,
-    maxReached: 0,
+    maxReached: initialStep,
     nextStep: () =>
       set((state) => {
         const step = clamp(state.step + 1, state.count)

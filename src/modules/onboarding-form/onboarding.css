@@ -17,6 +17,11 @@
   line-height: 1.2;
 }
 
+.onboarding__body pie-notification {
+  display: block;
+  margin-block-end: var(--dt-spacing-d, 1rem);
+}
+
 .onboarding__nav {
   display: flex;
   gap: var(--dt-spacing-c, 0.75rem);
@@ -59,7 +64,9 @@
     bottom: 0;
     margin-block-start: 0;
     padding: var(--dt-spacing-e, 1.5rem);
-    padding-bottom: calc(var(--dt-spacing-e, 1.5rem) + env(safe-area-inset-bottom));
+    padding-bottom: calc(
+      var(--dt-spacing-e, 1.5rem) + env(safe-area-inset-bottom)
+    );
     background: var(--dt-color-container-default, #fff);
   }
 }

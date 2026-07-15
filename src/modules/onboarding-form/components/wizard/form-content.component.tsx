@@ -13,7 +13,7 @@ import { OnboardingSteps } from '../onboarding-steps.component'
 import { OnboardingSuccess } from '../onboarding-feedback.component'
 import type { WizardProps } from './onboarding-wizard.types'
 
-export function FormContent({ config }: WizardProps) {
+export function FormContent({ config, resumeError }: WizardProps) {
   const { step, isFirst, isLast, maxReached, next, back } = useStepper()
   const { trigger, formState } = useFormContext<OnboardingFormValues>()
   const completedSteps = STEP_LABELS.map((_, index) => {
@@ -71,6 +71,16 @@ export function FormContent({ config }: WizardProps) {
       </header>
 
       <div className="onboarding__body">
+        {resumeError && (
+          <PieNotification
+            variant="warning"
+            isOpen
+            heading="We couldn't restore your saved application"
+          >
+            {resumeError}
+          </PieNotification>
+        )}
+
         {submitError && (
           <PieNotification
             variant="error"

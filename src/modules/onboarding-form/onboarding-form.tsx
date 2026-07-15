@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useStore } from '@/utils/useStore'
 import { onboardingFormService } from './service/onboarding.form-service'
-import { ConfigStatus } from './store/onboarding.store'
+import { ConfigStatus, ResumeStatus } from './store/onboarding.store'
+import { RESUME_APPLICATION_ID } from './onboarding.constants'
 import { OnboardingWizard } from './components/wizard/onboarding-wizard.component'
 import {
   ConfigError,
@@ -10,17 +11,25 @@ import {
 import './onboarding.css'
 
 export function OnboardingForm() {
-  const { config, configStatus, configError } = useStore(
-    onboardingFormService.store,
-  )
+  const {
+    config,
+    configStatus,
+    configError,
+    resumeStatus,
+    resumeError,
+    prefillApplication,
+  } = useStore(onboardingFormService.store)
 
   useEffect(() => {
     void onboardingFormService.loadConfig()
+    void onboardingFormService.loadResume(RESUME_APPLICATION_ID)
   }, [])
 
   if (
     configStatus === ConfigStatus.Idle ||
-    configStatus === ConfigStatus.Loading
+    configStatus === ConfigStatus.Loading ||
+    resumeStatus === ResumeStatus.Idle ||
+    resumeStatus === ResumeStatus.Loading
   ) {
     return <OnboardingLoading />
   }
@@ -34,5 +43,13 @@ export function OnboardingForm() {
     )
   }
 
-  return <OnboardingWizard config={config} />
+  return (
+    <OnboardingWizard
+      config={config}
+      prefillApplication={
+        resumeStatus === ResumeStatus.Ready ? prefillApplication : null
+      }
+      resumeError={resumeStatus === ResumeStatus.Error ? resumeError : null}
+    />
+  )
 }

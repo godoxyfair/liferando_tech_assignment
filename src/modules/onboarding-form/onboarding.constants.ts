@@ -15,3 +15,4 @@ export const STEP_LABELS = [
 export const STEP_COUNT = STEP_LABELS.length
 
 export const NEW_APPLICATION_ID = 'new'
+export const RESUME_APPLICATION_ID = 'resume-demo'
