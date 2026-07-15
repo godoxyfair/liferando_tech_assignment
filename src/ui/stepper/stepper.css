@@ -1,13 +1,13 @@
 @import '../variables.css';
 
 .stepper {
-  --stepper-accent: var(--dt-color-interactive-brand, #ff8000);
-  --stepper-on-accent: var(--dt-color-content-interactive-inverse, #fff);
-  --stepper-muted: var(--dt-color-content-disabled, #9aa0a6);
-  --stepper-line: var(--dt-color-border-default, #d9d9d9);
-  --stepper-text: var(--dt-color-content-default, #1a1a1a);
-  --stepper-positive: var(--dt-color-support-positive, #2b7836);
-  --stepper-error: var(--dt-color-support-error, #c4001e);
+  --stepper-accent: var(--dt-color-interactive-brand);
+  --stepper-on-accent: var(--dt-color-content-interactive-inverse);
+  --stepper-muted: var(--dt-color-content-disabled);
+  --stepper-line: var(--dt-color-border-default);
+  --stepper-text: var(--dt-color-content-default);
+  --stepper-positive: var(--dt-color-support-positive);
+  --stepper-error: var(--dt-color-support-error);
 
   margin-block-end: var(--dt-spacing-f);
 }
@@ -18,8 +18,8 @@
   margin: 0;
   padding: var(--dt-spacing-c);
   list-style: none;
-  background: var(--dt-color-container-subtle, #3f3d39);
-  border-radius: var(--dt-radius-d, 12px);
+  background: var(--dt-color-container-subtle);
+  border-radius: var(--dt-radius-rounded-c);
 }
 
 .stepper__item {
@@ -33,7 +33,7 @@
   width: 100%;
   padding: var(--dt-spacing-b) var(--dt-spacing-c);
   border: 0;
-  border-radius: var(--dt-radius-c, 8px);
+  border-radius: var(--dt-radius-rounded-b);
   background: transparent;
   color: var(--stepper-muted);
   font: inherit;
@@ -107,8 +107,8 @@
   gap: var(--dt-spacing-c);
   padding: var(--dt-spacing-c);
   margin-block-end: 0;
-  background: var(--dt-color-container-subtle, #3f3d39);
-  border-radius: var(--dt-radius-d, 12px);
+  background: var(--dt-color-container-subtle);
+  border-radius: var(--dt-radius-rounded-c);
 }
 
 .stepper__ring {

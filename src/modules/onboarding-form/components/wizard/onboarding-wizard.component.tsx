@@ -41,7 +41,11 @@ export function OnboardingWizard({
   return (
     <FormProvider {...methods}>
       <StepperProvider count={STEP_COUNT} initialStep={initialStep}>
-        <FormContent config={config} resumeError={resumeError} />
+        <FormContent
+          config={config}
+          prefillApplication={prefillApplication}
+          resumeError={resumeError}
+        />
       </StepperProvider>
     </FormProvider>
   )

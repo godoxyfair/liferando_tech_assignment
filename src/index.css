@@ -1,7 +1,7 @@
 @import '@justeattakeaway/pie-css/dist/index.css';
 
 :root {
-  /* So there are no pie-css declares these as bare 'JetSansDigital' I just got system stundart for ui kit . */
+  /* pie-css references 'JetSansDigital' but doesn't ship the font files, so the stack falls back to system fonts. */
   --dt-font-family-primary:
     'JetSansDigital', system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
 

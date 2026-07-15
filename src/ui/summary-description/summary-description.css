@@ -1,14 +1,14 @@
 .summary-description {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: var(--dt-spacing-b, 0.5rem) var(--dt-spacing-d, 1rem);
+  gap: var(--dt-spacing-b) var(--dt-spacing-d);
   margin: 0;
-  font-size: calc(var(--dt-font-body-l-size, 18) * 1px);
-  line-height: calc(var(--dt-font-body-l-line-height, 26) * 1px);
+  font-size: calc(var(--dt-font-body-l-size) * 1px);
+  line-height: calc(var(--dt-font-body-l-line-height) * 1px);
 }
 
 .summary-description__term {
-  color: var(--dt-color-content-subdued, #9ca3af);
+  color: var(--dt-color-content-subdued);
 }
 
 .summary-description__description {

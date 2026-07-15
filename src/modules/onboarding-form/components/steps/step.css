@@ -7,11 +7,11 @@
 
 .step__legend {
   padding: 0;
-  margin-block-end: var(--dt-spacing-d, 1rem);
+  margin-block-end: var(--dt-spacing-d);
   font-size: 1.125rem;
   font-weight: 700;
 }
 
 .step__hint {
-  color: var(--dt-color-content-subdued, #6a6a6a);
+  color: var(--dt-color-content-subdued);
 }

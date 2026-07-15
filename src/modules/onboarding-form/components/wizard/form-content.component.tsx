@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { PieButton } from '@justeattakeaway/pie-webc/react/button'
@@ -13,9 +14,16 @@ import { OnboardingSteps } from '../onboarding-steps.component'
 import { OnboardingSuccess } from '../onboarding-feedback.component'
 import type { WizardProps } from './onboarding-wizard.types'
 
-export function FormContent({ config, resumeError }: WizardProps) {
+export function FormContent({
+  config,
+  prefillApplication,
+  resumeError,
+}: WizardProps) {
   const { step, isFirst, isLast, maxReached, next, back } = useStepper()
   const { trigger, formState } = useFormContext<OnboardingFormValues>()
+  const [showResumeNotice, setShowResumeNotice] = useState(
+    Boolean(prefillApplication),
+  )
 
   const completedSteps = STEP_LABELS.map((_, index) => {
     const section = STEP_SECTIONS[index]
@@ -75,6 +83,18 @@ export function FormContent({ config, resumeError }: WizardProps) {
         <div className="sr-only" role="alert">
           {submitError}
         </div>
+
+        {showResumeNotice && (
+          <PieNotification
+            variant="info"
+            isOpen
+            isDismissible
+            heading="We restored your saved application"
+            onPieNotificationClose={() => setShowResumeNotice(false)}
+          >
+            Check your details and continue from where you left off.
+          </PieNotification>
+        )}
 
         {resumeError && (
           <PieNotification
