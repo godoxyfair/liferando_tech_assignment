@@ -9,6 +9,8 @@
   --stepper-muted: var(--dt-color-content-disabled, #9aa0a6);
   --stepper-line: var(--dt-color-container-border, #d9d9d9);
   --stepper-text: var(--dt-color-content-default, #1a1a1a);
+  --stepper-positive: var(--dt-color-support-positive, #2b7836);
+  --stepper-error: var(--dt-color-support-error, #c4001e);
 
   margin-block-end: var(--dt-spacing-f);
 }
@@ -17,8 +19,10 @@
   display: flex;
   gap: var(--dt-spacing-b);
   margin: 0;
-  padding: 0;
+  padding: var(--dt-spacing-c);
   list-style: none;
+  background: var(--dt-color-container-subtle, #3f3d39);
+  border-radius: var(--dt-radius-d, 12px);
 }
 
 .stepper__item {
@@ -82,6 +86,12 @@
   color: var(--stepper-on-accent);
 }
 
+.stepper__step[data-status='error'] .stepper__marker {
+  border-color: var(--stepper-error);
+  background: transparent;
+  color: var(--stepper-error);
+}
+
 .stepper__sr {
   position: absolute;
   width: 1px;
@@ -94,20 +104,47 @@
   border: 0;
 }
 
-@media (--mobile) {
-  .stepper__label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
+.stepper--mobile {
+  display: flex;
+  align-items: center;
+  gap: var(--dt-spacing-c);
+  padding: var(--dt-spacing-c);
+  margin-block-end: 0;
+  background: var(--dt-color-container-subtle, #3f3d39);
+  border-radius: var(--dt-radius-d, 12px);
+}
 
-  .stepper__step {
-    justify-content: center;
-  }
+.stepper__ring {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  border: 3px solid var(--stepper-positive);
+  border-radius: 50%;
+  color: var(--stepper-positive);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.stepper__ring[data-status='error'] {
+  border-color: var(--stepper-error);
+  color: var(--stepper-error);
+}
+
+.stepper__mobile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stepper__mobile-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--stepper-text);
+}
+
+.stepper__mobile-next {
+  font-size: 0.9375rem;
+  color: var(--stepper-muted);
 }
