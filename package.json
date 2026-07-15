@@ -8,6 +8,8 @@
     "Safari >= 14"
   ],
   "scripts": {
+    "start": "concurrently --names api,web --prefix-colors blue,green \"npm:api\" \"npm:dev\"",
+    "api": "node public/server.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest",
@@ -40,6 +42,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "concurrently": "^10.0.3",
     "eslint": "^10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-oxlint": "^1.73.0",

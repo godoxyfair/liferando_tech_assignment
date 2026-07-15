@@ -33,18 +33,36 @@ vehicle you picked, so the validation always matches what is on screen.
 - Node.js 20+
 - npm (project uses `package-lock.json` — do not use yarn/pnpm)
 
-## Setup
+## Quick start
+
+One command runs the app and the mock API together:
 
 ```bash
 npm install
+npm start
 ```
+
+- mock API → `http://localhost:4000` (`npm run api`)
+- app (Vite dev server) → `http://localhost:5173` (`npm run dev`)
 
 ## Scripts
 
-Start Vite dev server (HMR):
+Start app + mock API together (concurrently):
+
+```bash
+npm start
+```
+
+Start Vite dev server only (HMR):
 
 ```bash
 npm run dev
+```
+
+Start the mock API only:
+
+```bash
+npm run api
 ```
 
 Type-check (`tsc -b`) + production build to `dist/`:
