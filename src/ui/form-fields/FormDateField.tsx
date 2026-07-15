@@ -29,11 +29,11 @@ export function FormDateField<TFieldValues extends FieldValues>({
             ref={field.ref}
             name={field.name}
             type="date"
-            required
             className="field__native-input"
             data-status={fieldState.error ? 'error' : undefined}
             value={field.value ?? ''}
             autoComplete={autocomplete}
+            aria-required={true}
             aria-invalid={fieldState.error ? true : undefined}
             aria-describedby={fieldState.error ? errorId : undefined}
             onChange={(event) => {
