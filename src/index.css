@@ -4,11 +4,9 @@
   /* So there are no pie-css declares these as bare 'JetSansDigital' I just got system stundart for ui kit . */
   --dt-font-family-primary:
     'JetSansDigital', system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
-  --dt-font-family-code: 'PTMono', ui-monospace, Consolas, monospace;
 
   --sans: var(--dt-font-family-primary);
   --heading: var(--dt-font-family-primary);
-  --mono: var(--dt-font-family-code);
 
   color-scheme: light dark;
   font-family: var(--sans);

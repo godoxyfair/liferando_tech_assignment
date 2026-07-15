@@ -54,12 +54,4 @@ describe('createStepperStore', () => {
     store.getState().goToStep(2)
     expect(store.getState().step).toBe(2)
   })
-
-  it('reset returns to the initial state', () => {
-    const store = createStepperStore(3)
-    store.getState().nextStep()
-    store.getState().reset()
-    expect(store.getState().step).toBe(0)
-    expect(store.getState().maxReached).toBe(0)
-  })
 })

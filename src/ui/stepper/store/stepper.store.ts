@@ -8,7 +8,6 @@ export interface StepperState {
   nextStep: () => void
   backToStep: () => void
   goToStep: (step: number) => void
-  reset: () => void
 }
 
 export type StepperStore = StoreApi<StepperState>
@@ -43,6 +42,5 @@ export function createStepperStore(
           ? { step: clamp(step, state.count) }
           : state,
       ),
-    reset: () => set({ step: 0, maxReached: 0 }),
   }))
 }

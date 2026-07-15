@@ -1,4 +1,3 @@
-import type { FieldPathByValue } from 'react-hook-form'
 import type {
   DocumentTypeId,
   PersonalDetails,
@@ -17,8 +16,6 @@ export interface OnboardingFormValues {
   eligibility: EligibilityFormValues
   documents: DocumentsFormValues
 }
-
-export type FieldName = FieldPathByValue<OnboardingFormValues, string>
 
 export function createDefaultFormValues(): OnboardingFormValues {
   return {
