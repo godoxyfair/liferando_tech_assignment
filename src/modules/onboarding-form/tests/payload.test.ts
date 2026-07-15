@@ -31,22 +31,38 @@ describe('toSubmitPayload', () => {
     })
   })
 
-  it('preserves overlapping document numbers across a vehicle change', () => {
-    const values = formWith({
-      eligibility: { city: 'Berlin', vehicleType: 'car' },
-      documents: {
-        id_document: { number: 'ID-1' },
-        drivers_license: { number: 'DL-9' },
-        vehicle_insurance: { number: 'INS-5' },
-        vehicle_registration: { number: 'REG-3' },
-      },
-    })
+  it('keeps the shared id_document number when the vehicle changes', () => {
+    const documents = {
+      id_document: { number: 'ID-1' },
+      drivers_license: { number: 'DL-9' },
+      vehicle_insurance: { number: 'INS-5' },
+      vehicle_registration: { number: 'REG-3' },
+    }
 
-    expect(toSubmitPayload(values, testConfig).documents).toEqual([
+    const asCar = toSubmitPayload(
+      formWith({
+        eligibility: { city: 'Berlin', vehicleType: 'car' },
+        documents,
+      }),
+      testConfig,
+    )
+
+    const asBicycle = toSubmitPayload(
+      formWith({
+        eligibility: { city: 'Berlin', vehicleType: 'bicycle' },
+        documents,
+      }),
+      testConfig,
+    )
+
+    expect(asCar.documents).toEqual([
       { type: 'id_document', number: 'ID-1' },
       { type: 'drivers_license', number: 'DL-9' },
       { type: 'vehicle_insurance', number: 'INS-5' },
       { type: 'vehicle_registration', number: 'REG-3' },
+    ])
+    expect(asBicycle.documents).toEqual([
+      { type: 'id_document', number: 'ID-1' },
     ])
   })
 

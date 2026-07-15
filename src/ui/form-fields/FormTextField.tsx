@@ -31,7 +31,9 @@ export function FormTextField<TFieldValues extends FieldValues>({
             id={id}
             ref={(element) =>
               field.ref(
-                element && { focus: () => element.focusTarget.focus() },
+                element && {
+                  focus: () => (element.focusTarget ?? element).focus(),
+                },
               )
             }
             name={field.name}
