@@ -82,7 +82,7 @@ export function ComboBoxControl({
             ) : (
               ({ option }: { option: SelectOption }) => (
                 <ComboboxOption
-                  // key={option.value}
+                  key={option.value}
                   value={option}
                   className="combobox__option"
                 >
