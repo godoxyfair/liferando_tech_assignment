@@ -18,6 +18,7 @@ export type SubmitOutcome =
 export class OnboardingFormService {
   readonly store = onboardingStore
   private configController: AbortController | null = null
+  private submitController: AbortController | null = null
 
   async loadConfig(): Promise<void> {
     this.configController?.abort()
@@ -43,19 +44,33 @@ export class OnboardingFormService {
   }
 
   async handleSubmit(payload: SubmitPayload): Promise<SubmitOutcome> {
+    this.submitController?.abort()
+    const controller = new AbortController()
+    this.submitController = controller
+
     const { setSubmitStatus, setApplicationId } = this.store.getState()
     setSubmitStatus(SubmitStatus.Submitting)
 
     try {
       const result = await onboardingApi.submitApplication(
-        NEW_APPLICATION_ID, //спросить почему тут id передавать надо. у нас же новая заявка
+        NEW_APPLICATION_ID,
         payload,
+        controller.signal,
       )
 
+      if (controller.signal.aborted) {
+        return { status: 'error' }
+      }
+
       setApplicationId(result.applicationId)
+      setSubmitStatus(SubmitStatus.Submitted)
 
       return { status: 'submitted', applicationId: result.applicationId }
     } catch (error) {
+      if (controller.signal.aborted) {
+        return { status: 'error' }
+      }
+
       if (isOnboardingApiError(error)) {
         const fieldErrors = error.response?.data?.errors
 
@@ -97,6 +112,7 @@ export class OnboardingFormService {
 
   reset(): void {
     this.configController?.abort()
+    this.submitController?.abort()
     this.store.getState().reset()
   }
 }

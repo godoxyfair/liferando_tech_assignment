@@ -7,10 +7,9 @@ import {
   ComboboxOptions,
 } from '@headlessui/react'
 import { PieAssistiveText } from '@justeattakeaway/pie-webc/react/assistive-text'
+import { findOption } from '../field.utils'
 import type { SelectOption } from '../field.types'
 import type { ComboBoxControlProps } from './combobox-control.types'
-
-const MAX_VISIBLE_OPTIONS = 100
 
 export function ComboBoxControl({
   id,
@@ -27,17 +26,16 @@ export function ComboBoxControl({
 
   const filteredOptions = useMemo(() => {
     const optionText = query.trim().toLowerCase()
-    const matches = optionText
+
+    return optionText
       ? options.filter((option) =>
           option.label.toLowerCase().includes(optionText),
         )
       : options
-
-    return matches.slice(0, MAX_VISIBLE_OPTIONS)
   }, [options, query])
 
   const selectedOption = useMemo(
-    () => options.find((option) => option.value === value) ?? null,
+    () => findOption(options, value),
     [options, value],
   )
 
@@ -48,6 +46,9 @@ export function ComboBoxControl({
       <Combobox
         value={selectedOption}
         by="value"
+        virtual={
+          filteredOptions.length > 0 ? { options: filteredOptions } : undefined
+        }
         onChange={(option: SelectOption | null) =>
           onSelect(option ? option.value : '')
         }
@@ -79,20 +80,22 @@ export function ComboBoxControl({
             {filteredOptions.length === 0 ? (
               <div className="combobox__empty">{emptyMessage}</div>
             ) : (
-              filteredOptions.map((option) => (
+              ({ option }: { option: SelectOption }) => (
                 <ComboboxOption
-                  key={option.value}
+                  // key={option.value}
                   value={option}
                   className="combobox__option"
                 >
                   {option.label}
                 </ComboboxOption>
-              ))
+              )
             )}
           </ComboboxOptions>
         </div>
       </Combobox>
-      {error && <PieAssistiveText id={errorId} variant="error" message={error} />}
+      {error && (
+        <PieAssistiveText id={errorId} variant="error" message={error} />
+      )}
     </>
   )
 }

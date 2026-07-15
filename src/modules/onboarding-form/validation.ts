@@ -110,3 +110,5 @@ export const STEP_FIELDS = [
   ['eligibility.city', 'eligibility.vehicleType'],
   ['documents'],
 ] as const satisfies ReadonlyArray<ReadonlyArray<Path<OnboardingFormValues>>>
+
+export const STEP_SECTIONS = ['personal', 'eligibility', 'documents'] as const

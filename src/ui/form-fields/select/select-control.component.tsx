@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
 import { PieAssistiveText } from '@justeattakeaway/pie-webc/react/assistive-text'
+import { findOption } from '../field.utils'
 import type { SelectControlProps } from './select-control.types'
 
 export function SelectControl({
@@ -14,7 +15,7 @@ export function SelectControl({
   onBlur,
 }: SelectControlProps) {
   const selectedOption = useMemo(
-    () => options.find((option) => option.value === value) ?? null,
+    () => findOption(options, value),
     [options, value],
   )
 

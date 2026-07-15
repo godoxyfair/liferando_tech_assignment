@@ -5,7 +5,7 @@ import { ComboBoxControl } from './combobox/combobox-control.component'
 import type { FormComboBoxFieldProps } from './field.types'
 import './field.css'
 
-/** Searchable combobox, render-capped for large option lists */
+/** Searchable combobox, virtualized for large option lists */
 export function FormComboBoxField<TFieldValues extends FieldValues>({
   control,
   name,

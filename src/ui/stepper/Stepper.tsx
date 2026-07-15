@@ -26,7 +26,12 @@ export function Stepper({
           {step + 1}/{labels.length}
         </span>
         <span className="stepper__mobile-info">
-          <span className="stepper__mobile-title">{labels[step]}</span>
+          <span className="stepper__mobile-title">
+            {labels[step]}
+            {invalid[step] && (
+              <span className="stepper__sr"> (has an error)</span>
+            )}
+          </span>
           {nextLabel && (
             <span className="stepper__mobile-next">Next: {nextLabel}</span>
           )}
@@ -62,6 +67,9 @@ export function Stepper({
                 {isDone && <span className="stepper__sr"> (completed)</span>}
                 {isActive && (
                   <span className="stepper__sr"> (current step)</span>
+                )}
+                {invalid[index] && (
+                  <span className="stepper__sr"> (has an error)</span>
                 )}
               </button>
             </li>

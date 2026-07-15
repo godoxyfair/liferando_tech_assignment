@@ -51,12 +51,7 @@ export const onboardingStore = createStore<OnboardingState>()((set) => ({
   setSubmitStatus: (submitStatus, submitError = null) =>
     set({ submitStatus, submitError }),
 
-  setApplicationId: (applicationId) =>
-    set({
-      applicationId,
-      submitStatus: SubmitStatus.Submitted,
-      submitError: null,
-    }),
+  setApplicationId: (applicationId) => set({ applicationId }),
 
   reset: () => set(createInitialState()),
 }))

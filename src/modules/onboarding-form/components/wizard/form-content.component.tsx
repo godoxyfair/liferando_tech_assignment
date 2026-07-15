@@ -7,13 +7,11 @@ import { StepTransition } from '@/ui/step-transition'
 import { SubmitStatus } from '../../store/onboarding.store'
 import { STEP_LABELS } from '../../onboarding.constants'
 import type { OnboardingFormValues } from '../../onboarding.form-model'
-import { STEP_FIELDS } from '../../validation'
+import { STEP_FIELDS, STEP_SECTIONS } from '../../validation'
 import { useOnboardingSubmit } from '../../hooks/use-onboarding-submit'
 import { OnboardingSteps } from '../onboarding-steps.component'
 import { OnboardingSuccess } from '../onboarding-feedback.component'
 import type { WizardProps } from './onboarding-wizard.types'
-
-const STEP_SECTIONS = ['personal', 'eligibility', 'documents'] as const
 
 export function FormContent({ config }: WizardProps) {
   const { step, isFirst, isLast, maxReached, next, back } = useStepper()

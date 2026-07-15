@@ -101,11 +101,9 @@
   box-shadow: 0 6px 16px rgb(0 0 0 / 12%);
 }
 
-.combobox__listbox:empty {
-  display: none;
-}
-
 .combobox__option {
+  box-sizing: border-box;
+  width: 100%;
   padding: var(--dt-spacing-b, 0.5rem) var(--dt-spacing-c, 0.75rem);
   border-radius: var(--dt-radius-rounded-c, 4px);
   color: var(--dt-color-content-default, #1a1a1a);
