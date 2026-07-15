@@ -1,5 +1,8 @@
 import { createStore } from 'zustand/vanilla'
-import type { OnboardingApplication, OnboardingConfig } from '../onboarding.types'
+import type {
+  OnboardingApplication,
+  OnboardingConfig,
+} from '../onboarding.types'
 
 export enum ConfigStatus {
   Idle = 'idle',

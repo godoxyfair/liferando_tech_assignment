@@ -1,4 +1,7 @@
-import type { OnboardingApplication, OnboardingConfig } from '../../onboarding.types'
+import type {
+  OnboardingApplication,
+  OnboardingConfig,
+} from '../../onboarding.types'
 
 export interface WizardProps {
   config: OnboardingConfig

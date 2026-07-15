@@ -1,5 +1,10 @@
 import { useMemo } from 'react'
-import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/react'
 import { PieAssistiveText } from '@justeattakeaway/pie-webc/react/assistive-text'
 import { findOption } from '../field.utils'
 import type { SelectControlProps } from './select-control.types'
@@ -36,21 +41,33 @@ export function SelectControl({
             data-status={error ? 'error' : undefined}
             onBlur={onBlur}
           >
-            <span className={selectedOption ? undefined : 'select__placeholder'}>
+            <span
+              className={selectedOption ? undefined : 'select__placeholder'}
+            >
               {selectedOption?.label ?? placeholder}
             </span>
           </ListboxButton>
           <span className="combobox__toggle" aria-hidden="true" />
-          <ListboxOptions className="combobox__listbox" anchor="bottom start" modal={false}>
+          <ListboxOptions
+            className="combobox__listbox"
+            anchor="bottom start"
+            modal={false}
+          >
             {options.map((option) => (
-              <ListboxOption key={option.value} value={option.value} className="combobox__option">
+              <ListboxOption
+                key={option.value}
+                value={option.value}
+                className="combobox__option"
+              >
                 {option.label}
               </ListboxOption>
             ))}
           </ListboxOptions>
         </div>
       </Listbox>
-      {error && <PieAssistiveText id={errorId} variant="error" message={error} />}
+      {error && (
+        <PieAssistiveText id={errorId} variant="error" message={error} />
+      )}
     </>
   )
 }
