@@ -1,17 +1,16 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
-import { PieFormLabel } from '@justeattakeaway/pie-webc/react/form-label'
 import { ComboBoxControl } from './combobox/combobox-control.component'
+import { fieldControlId } from './field.utils'
 import type { FormComboBoxFieldProps } from './field.types'
 import './field.css'
 
-/** Searchable combobox, virtualized for large option lists */
 export function FormComboBoxField<TFieldValues extends FieldValues>({
   control,
   name,
   label,
   options,
-  id = `field-${name}`,
+  id = fieldControlId(name),
   placeholder = 'Search…',
   emptyMessage = 'No matches found',
 }: FormComboBoxFieldProps<TFieldValues>) {
@@ -19,13 +18,16 @@ export function FormComboBoxField<TFieldValues extends FieldValues>({
 
   return (
     <div className="field">
-      <PieFormLabel for={id}>{label}</PieFormLabel>
+      <label className="field__label" htmlFor={id}>
+        {label}
+      </label>
       <Controller
         control={control}
         name={name}
         render={({ field, fieldState }) => (
           <ComboBoxControl
             id={id}
+            inputRef={field.ref}
             name={field.name}
             value={field.value ?? ''}
             error={fieldState.error?.message}

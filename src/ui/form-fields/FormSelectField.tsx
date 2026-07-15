@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
-import { PieFormLabel } from '@justeattakeaway/pie-webc/react/form-label'
 import { SelectControl } from './select/select-control.component'
+import { fieldControlId } from './field.utils'
 import type { FormSelectFieldProps } from './field.types'
 import './field.css'
 
@@ -10,20 +10,23 @@ export function FormSelectField<TFieldValues extends FieldValues>({
   name,
   label,
   options,
-  id = `field-${name}`,
+  id = fieldControlId(name),
   placeholder = 'Please select…',
 }: FormSelectFieldProps<TFieldValues>) {
   const { trigger } = useFormContext<TFieldValues>()
 
   return (
     <div className="field">
-      <PieFormLabel for={id}>{label}</PieFormLabel>
+      <label className="field__label" htmlFor={id}>
+        {label}
+      </label>
       <Controller
         control={control}
         name={name}
         render={({ field, fieldState }) => (
           <SelectControl
             id={id}
+            buttonRef={field.ref}
             name={field.name}
             value={field.value ?? ''}
             error={fieldState.error?.message}

@@ -1,7 +1,8 @@
 import * as yup from 'yup'
+import type { FieldError, FieldErrors } from 'react-hook-form'
 import { Step } from '../onboarding.constants'
 import type { OnboardingFormValues } from '../onboarding.form-model'
-import type { OnboardingSchema } from '../validation'
+import type { OnboardingSchema, StepSection } from '../validation'
 
 const FIELD_PREFIX_TO_STEP: Record<string, Step> = {
   personal: Step.Personal,
@@ -13,6 +14,42 @@ export function mapServerErrorToStep(field: string): Step | null {
   const prefix = field.split('.')[0]
 
   return prefix in FIELD_PREFIX_TO_STEP ? FIELD_PREFIX_TO_STEP[prefix] : null
+}
+
+function isFieldError(node: unknown): node is FieldError {
+  return (
+    typeof node === 'object' &&
+    node !== null &&
+    'type' in node &&
+    typeof (node as FieldError).type === 'string'
+  )
+}
+
+export function firstErrorFieldPath(
+  errors: FieldErrors<OnboardingFormValues>,
+  section: StepSection,
+): string | null {
+  const walk = (node: unknown, path: string): string | null => {
+    if (!node || typeof node !== 'object') {
+      return null
+    }
+
+    if (isFieldError(node)) {
+      return path
+    }
+
+    for (const [key, child] of Object.entries(node)) {
+      const found = walk(child, `${path}.${key}`)
+
+      if (found) {
+        return found
+      }
+    }
+
+    return null
+  }
+
+  return walk(errors[section], section)
 }
 
 export function firstIncompleteStep(

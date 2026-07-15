@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import { PieButton } from '@justeattakeaway/pie-webc/react/button'
 
 export function OnboardingLoading() {
@@ -29,9 +30,17 @@ interface OnboardingSuccessProps {
 }
 
 export function OnboardingSuccess({ applicationId }: OnboardingSuccessProps) {
+  const headingRef = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    headingRef.current?.focus()
+  }, [])
+
   return (
     <div className="onboarding__success" role="status" aria-live="polite">
-      <h1 className="onboarding__title">Application submitted</h1>
+      <h1 className="onboarding__title" ref={headingRef} tabIndex={-1}>
+        Application submitted
+      </h1>
       <p>
         Thanks for applying to ride with us. Your reference is{' '}
         <strong>{applicationId}</strong> — we'll be in touch by email.

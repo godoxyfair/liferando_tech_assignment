@@ -17,6 +17,10 @@
   line-height: 1.2;
 }
 
+.onboarding__title:focus {
+  outline: none;
+}
+
 .onboarding__body pie-notification {
   display: block;
   margin-block-end: var(--dt-spacing-d, 1rem);

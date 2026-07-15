@@ -112,3 +112,5 @@ export const STEP_FIELDS = [
 ] as const satisfies ReadonlyArray<ReadonlyArray<Path<OnboardingFormValues>>>
 
 export const STEP_SECTIONS = ['personal', 'eligibility', 'documents'] as const
+
+export type StepSection = (typeof STEP_SECTIONS)[number]

@@ -4,6 +4,7 @@ import './step-transition.css'
 
 export function StepTransition({ stepKey, children }: StepTransitionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const previousStepKey = useRef(stepKey)
 
   useEffect(() => {
     const container = containerRef.current
@@ -13,8 +14,11 @@ export function StepTransition({ stepKey, children }: StepTransitionProps) {
       container?.setAttribute('aria-label', legendText)
     }
 
-    container?.focus()
-  }, [])
+    if (previousStepKey.current !== stepKey) {
+      previousStepKey.current = stepKey
+      container?.focus()
+    }
+  }, [stepKey])
 
   return (
     <div

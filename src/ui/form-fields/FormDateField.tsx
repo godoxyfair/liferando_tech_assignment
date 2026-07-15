@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
 import { PieAssistiveText } from '@justeattakeaway/pie-webc/react/assistive-text'
-import { PieFormLabel } from '@justeattakeaway/pie-webc/react/form-label'
+import { fieldControlId } from './field.utils'
 import type { FormDateFieldProps } from './field.types'
 import './field.css'
 
@@ -9,7 +9,7 @@ export function FormDateField<TFieldValues extends FieldValues>({
   control,
   name,
   label,
-  id = `field-${name}`,
+  id = fieldControlId(name),
   autocomplete,
 }: FormDateFieldProps<TFieldValues>) {
   const errorId = `${id}-error`
@@ -20,9 +20,12 @@ export function FormDateField<TFieldValues extends FieldValues>({
       name={name}
       render={({ field, fieldState }) => (
         <div className="field">
-          <PieFormLabel for={id}>{label}</PieFormLabel>
+          <label className="field__label" htmlFor={id}>
+            {label}
+          </label>
           <input
             id={id}
+            ref={field.ref}
             name={field.name}
             type="date"
             className="field__native-input"

@@ -1,7 +1,9 @@
+import type { Ref } from 'react'
 import type { SelectOption } from '../field.types'
 
 export interface SelectControlProps {
   id: string
+  buttonRef?: Ref<HTMLButtonElement>
   name: string
   value: string
   error?: string

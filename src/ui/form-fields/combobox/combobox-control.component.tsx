@@ -13,6 +13,7 @@ import type { ComboBoxControlProps } from './combobox-control.types'
 
 export function ComboBoxControl({
   id,
+  inputRef,
   name,
   value,
   error,
@@ -57,6 +58,7 @@ export function ComboBoxControl({
         <div className="combobox">
           <ComboboxInput
             id={id}
+            ref={inputRef}
             name={name}
             className="field__native-input combobox__input"
             autoComplete="off"

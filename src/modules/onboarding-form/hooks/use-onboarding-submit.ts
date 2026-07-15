@@ -1,20 +1,38 @@
+import { useEffect, useRef } from 'react'
 import { useFormContext } from 'react-hook-form'
 import type { FieldErrors, Path } from 'react-hook-form'
 import { useStore } from '@/utils/useStore'
 import { useStepper } from '@/ui/stepper'
 import { onboardingFormService } from '../service/onboarding.form-service'
-import { Step } from '../onboarding.constants'
-import { mapServerErrorToStep } from '../utils/errors'
+import type { Step } from '../onboarding.constants'
+import { STEP_SECTIONS } from '../validation'
+import { firstErrorFieldPath, mapServerErrorToStep } from '../utils/errors'
 import { toSubmitPayload } from '../utils/payload'
 import type { OnboardingConfig, ServerFieldError } from '../onboarding.types'
 import type { OnboardingFormValues } from '../onboarding.form-model'
 
 export function useOnboardingSubmit(config: OnboardingConfig) {
-  const { handleSubmit, setError } = useFormContext<OnboardingFormValues>()
-  const { goTo } = useStepper()
+  const { handleSubmit, setError, setFocus } =
+    useFormContext<OnboardingFormValues>()
+
+  const { goTo, step } = useStepper()
+
   const { submitStatus, submitError, applicationId } = useStore(
     onboardingFormService.store,
   )
+
+  const pendingFocusField = useRef<Path<OnboardingFormValues> | null>(null)
+
+  useEffect(() => {
+    const fieldToFocus = pendingFocusField.current
+
+    if (!fieldToFocus) {
+      return
+    }
+
+    pendingFocusField.current = null
+    setFocus(fieldToFocus)
+  }, [step, setFocus])
 
   const applyFieldErrors = (errors: ServerFieldError[]) => {
     for (const { field, message } of errors) {
@@ -24,12 +42,22 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
       })
     }
 
-    const steps = errors
-      .map(({ field }) => mapServerErrorToStep(field))
-      .filter((step): step is Step => step !== null)
+    const mappedErrors = errors
+      .map(({ field }) => ({ field, step: mapServerErrorToStep(field) }))
+      .filter(
+        (mapped): mapped is { field: string; step: Step } =>
+          mapped.step !== null,
+      )
 
-    if (steps.length > 0) {
-      goTo(Math.min(...steps))
+    if (mappedErrors.length > 0) {
+      const targetStep = Math.min(...mappedErrors.map((mapped) => mapped.step))
+      const firstFieldOnStep = mappedErrors.find(
+        (mapped) => mapped.step === targetStep,
+      )
+
+      pendingFocusField.current =
+        (firstFieldOnStep?.field as Path<OnboardingFormValues>) ?? null
+      goTo(targetStep)
     }
   }
 
@@ -44,19 +72,23 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
   }
 
   const onInvalid = (errors: FieldErrors<OnboardingFormValues>) => {
-    if (errors.personal) {
-      goTo(Step.Personal)
-    } else if (errors.eligibility) {
-      goTo(Step.Eligibility)
-    } else if (errors.documents) {
-      goTo(Step.Documents)
+    const invalidSectionIndex = STEP_SECTIONS.findIndex(
+      (section) => errors[section],
+    )
+
+    if (invalidSectionIndex >= 0) {
+      pendingFocusField.current = firstErrorFieldPath(
+        errors,
+        STEP_SECTIONS[invalidSectionIndex],
+      ) as Path<OnboardingFormValues> | null
+      goTo(invalidSectionIndex)
     }
 
     onboardingFormService.noteValidationError()
   }
 
   return {
-    onSubmit: handleSubmit(onValid, onInvalid),
+    onSubmit: () => handleSubmit(onValid, onInvalid)(),
     status: submitStatus,
     error: submitError,
     applicationId,

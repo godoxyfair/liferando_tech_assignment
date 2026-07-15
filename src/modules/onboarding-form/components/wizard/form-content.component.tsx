@@ -37,7 +37,7 @@ export function FormContent({ config, resumeError }: WizardProps) {
 
   const goToNextStep = async () => {
     const stepFields = STEP_FIELDS[step]
-    const isStepValid = await trigger(stepFields)
+    const isStepValid = await trigger(stepFields, { shouldFocus: true })
     if (isStepValid) {
       next()
     }

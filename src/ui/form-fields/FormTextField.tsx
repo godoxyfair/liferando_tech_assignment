@@ -1,8 +1,8 @@
 import { Controller } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
 import { PieTextInput } from '@justeattakeaway/pie-webc/react/text-input'
-import { PieFormLabel } from '@justeattakeaway/pie-webc/react/form-label'
 import { readControlValue } from './utils/field.util'
+import { fieldControlId } from './field.utils'
 import type { FormTextFieldProps } from './field.types'
 import './field.css'
 
@@ -10,7 +10,7 @@ export function FormTextField<TFieldValues extends FieldValues>({
   control,
   name,
   label,
-  id = `field-${name}`,
+  id = fieldControlId(name),
   type = 'text',
   autocomplete,
   inputmode,
@@ -18,13 +18,20 @@ export function FormTextField<TFieldValues extends FieldValues>({
 }: FormTextFieldProps<TFieldValues>) {
   return (
     <div className="field">
-      <PieFormLabel for={id}>{label}</PieFormLabel>
+      <label className="field__label" htmlFor={id}>
+        {label}
+      </label>
       <Controller
         control={control}
         name={name}
         render={({ field, fieldState }) => (
           <PieTextInput
             id={id}
+            ref={(element) =>
+              field.ref(
+                element && { focus: () => element.focusTarget.focus() },
+              )
+            }
             name={field.name}
             type={type}
             value={field.value ?? ''}

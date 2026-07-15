@@ -11,6 +11,18 @@
   animation: step-transition-fade-in 1000ms ease;
 }
 
+.step-transition:focus {
+  outline: none;
+}
+
+.step-transition:focus-visible {
+  outline: none;
+  border-radius: var(--dt-radius-rounded-c, 8px);
+  box-shadow:
+    0 0 0 2px var(--dt-color-focus-inner, #fff),
+    0 0 0 4px var(--dt-color-focus-outer, #ff8000);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .step-transition {
     animation: none;

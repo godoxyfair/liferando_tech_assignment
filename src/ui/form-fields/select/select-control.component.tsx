@@ -6,6 +6,7 @@ import type { SelectControlProps } from './select-control.types'
 
 export function SelectControl({
   id,
+  buttonRef,
   name,
   value,
   error,
@@ -27,6 +28,7 @@ export function SelectControl({
         <div className="combobox">
           <ListboxButton
             id={id}
+            ref={buttonRef}
             name={name}
             className="field__native-input combobox__input select__button"
             aria-invalid={Boolean(error)}
