@@ -1,9 +1,10 @@
-import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useEffect, useMemo } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { FormComboBoxField, FormSelectField } from '@/ui/form-fields'
 import type { SelectOption } from '@/ui/form-fields'
+import { getRequiredDocuments } from '../../utils/documents'
 import type { OnboardingFormValues } from '../../onboarding.form-model'
-import type { OnboardingConfig } from '../../onboarding.types'
+import type { DocumentTypeId, OnboardingConfig } from '../../onboarding.types'
 import './step.css'
 
 interface EligibilityStepProps {
@@ -11,7 +12,23 @@ interface EligibilityStepProps {
 }
 
 export function EligibilityStep({ config }: EligibilityStepProps) {
-  const { control } = useFormContext<OnboardingFormValues>()
+  const { control, clearErrors } = useFormContext<OnboardingFormValues>()
+  const vehicleType = useWatch<OnboardingFormValues, 'eligibility.vehicleType'>(
+    {
+      name: 'eligibility.vehicleType',
+    },
+  )
+
+  useEffect(() => {
+    const requiredDocuments = getRequiredDocuments(config, vehicleType ?? '')
+    const allDocumentTypes = Object.keys(config.documents) as DocumentTypeId[]
+
+    for (const documentType of allDocumentTypes) {
+      if (!requiredDocuments.includes(documentType)) {
+        clearErrors(`documents.${documentType}.number`)
+      }
+    }
+  }, [vehicleType, config, clearErrors])
 
   const cityOptions = useMemo<SelectOption[]>(
     () => config.cities.map((city) => ({ value: city, label: city })),

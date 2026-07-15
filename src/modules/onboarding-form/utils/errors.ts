@@ -52,23 +52,32 @@ export function firstErrorFieldPath(
   return walk(errors[section], section)
 }
 
-export function firstIncompleteStep(
+export function incompleteSteps(
   schema: OnboardingSchema,
   values: OnboardingFormValues,
-): Step {
+): Set<Step> {
   try {
     schema.validateSync(values, { abortEarly: false })
 
-    return Step.Review
+    return new Set()
   } catch (error) {
     if (!(error instanceof yup.ValidationError)) {
-      return Step.Personal
+      return new Set([Step.Personal])
     }
 
     const steps = error.inner
       .map((innerError) => mapServerErrorToStep(innerError.path ?? ''))
       .filter((step): step is Step => step !== null)
 
-    return steps.length > 0 ? Math.min(...steps) : Step.Personal
+    return new Set(steps.length > 0 ? steps : [Step.Personal])
   }
+}
+
+export function firstIncompleteStep(
+  schema: OnboardingSchema,
+  values: OnboardingFormValues,
+): Step {
+  const incomplete = incompleteSteps(schema, values)
+
+  return incomplete.size > 0 ? (Math.min(...incomplete) as Step) : Step.Review
 }

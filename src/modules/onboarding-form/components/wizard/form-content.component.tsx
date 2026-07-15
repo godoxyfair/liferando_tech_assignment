@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { PieButton } from '@justeattakeaway/pie-webc/react/button'
 import { PieNotification } from '@justeattakeaway/pie-webc/react/notification'
 import { Stepper, useStepper } from '@/ui/stepper'
@@ -8,7 +8,12 @@ import { StepTransition } from '@/ui/step-transition'
 import { SubmitStatus } from '../../store/onboarding.store'
 import { STEP_LABELS } from '../../onboarding.constants'
 import type { OnboardingFormValues } from '../../onboarding.form-model'
-import { STEP_FIELDS, STEP_SECTIONS } from '../../validation'
+import {
+  STEP_FIELDS,
+  STEP_SECTIONS,
+  buildOnboardingSchema,
+} from '../../validation'
+import { incompleteSteps } from '../../utils/errors'
 import { useOnboardingSubmit } from '../../hooks/use-onboarding-submit'
 import { OnboardingSteps } from '../onboarding-steps.component'
 import { OnboardingSuccess } from '../onboarding-feedback.component'
@@ -25,10 +30,20 @@ export function FormContent({
     Boolean(prefillApplication),
   )
 
+  const formValues = useWatch<OnboardingFormValues>()
+  const schema = useMemo(() => buildOnboardingSchema(config), [config])
+  const incomplete = useMemo(
+    () => incompleteSteps(schema, formValues as OnboardingFormValues),
+    [schema, formValues],
+  )
+
   const completedSteps = STEP_LABELS.map((_, index) => {
     const section = STEP_SECTIONS[index]
 
-    return index < maxReached && (!section || !formState.errors[section])
+    return (
+      index < maxReached &&
+      (!section || (!incomplete.has(index) && !formState.errors[section]))
+    )
   })
 
   const invalidSteps = STEP_LABELS.map((_, index) => {
