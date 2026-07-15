@@ -1,18 +1,20 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
 import { PieFormLabel } from '@justeattakeaway/pie-webc/react/form-label'
-import { SelectControl } from './select/select-control.component'
-import type { FormSelectFieldProps } from './field.types'
+import { ComboBoxControl } from './combobox/combobox-control.component'
+import type { FormComboBoxFieldProps } from './field.types'
 import './field.css'
 
-export function FormSelectField<TFieldValues extends FieldValues>({
+/** Searchable combobox, render-capped for large option lists */
+export function FormComboBoxField<TFieldValues extends FieldValues>({
   control,
   name,
   label,
   options,
   id = `field-${name}`,
-  placeholder = 'Please select…',
-}: FormSelectFieldProps<TFieldValues>) {
+  placeholder = 'Search…',
+  emptyMessage = 'No matches found',
+}: FormComboBoxFieldProps<TFieldValues>) {
   const { trigger } = useFormContext<TFieldValues>()
 
   return (
@@ -22,13 +24,14 @@ export function FormSelectField<TFieldValues extends FieldValues>({
         control={control}
         name={name}
         render={({ field, fieldState }) => (
-          <SelectControl
+          <ComboBoxControl
             id={id}
             name={field.name}
             value={field.value ?? ''}
             error={fieldState.error?.message}
             options={options}
             placeholder={placeholder}
+            emptyMessage={emptyMessage}
             onSelect={(value) => {
               field.onChange(value)
               void trigger(name)

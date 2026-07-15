@@ -12,13 +12,14 @@
     "build": "tsc -b && vite build",
     "test": "vitest",
     "test:run": "vitest run",
-    "lint": "oxlint",
+    "lint": "oxlint && eslint .",
     "lint:eslint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.10",
     "@hookform/resolvers": "^5.4.0",
     "@justeattakeaway/pie-webc": "^0.10.31",
     "@lit/react": "^1.0.8",
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",

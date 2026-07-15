@@ -28,6 +28,14 @@ export interface FormSelectFieldProps<
   placeholder?: string
 }
 
+export interface FormComboBoxFieldProps<
+  TFieldValues extends FieldValues,
+> extends FormFieldProps<TFieldValues> {
+  options: SelectOption[]
+  placeholder?: string
+  emptyMessage?: string
+}
+
 export interface FormDateFieldProps<
   TFieldValues extends FieldValues,
 > extends FormFieldProps<TFieldValues> {
