@@ -38,6 +38,7 @@ export function FormTextField<TFieldValues extends FieldValues>({
             }
             name={field.name}
             type={type}
+            required
             value={field.value ?? ''}
             autocomplete={autocomplete}
             inputmode={inputmode}

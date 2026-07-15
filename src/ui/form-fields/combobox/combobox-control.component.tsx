@@ -69,6 +69,7 @@ export function ComboBoxControl({
             className="field__native-input combobox__input"
             autoComplete="off"
             placeholder={placeholder}
+            aria-required
             aria-invalid={Boolean(error)}
             aria-describedby={errorId}
             data-status={error ? 'error' : undefined}

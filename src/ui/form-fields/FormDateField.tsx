@@ -29,6 +29,7 @@ export function FormDateField<TFieldValues extends FieldValues>({
             ref={field.ref}
             name={field.name}
             type="date"
+            required
             className="field__native-input"
             data-status={fieldState.error ? 'error' : undefined}
             value={field.value ?? ''}
