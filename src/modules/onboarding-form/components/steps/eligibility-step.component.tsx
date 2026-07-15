@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { FormSelectField } from '@/ui/form-fields'
+import { FormComboBoxField, FormSelectField } from '@/ui/form-fields'
 import type { SelectOption } from '@/ui/form-fields'
 import type { OnboardingFormValues } from '../../onboarding.form-model'
 import type { OnboardingConfig } from '../../onboarding.types'
@@ -26,12 +26,13 @@ export function EligibilityStep({ config }: EligibilityStepProps) {
   return (
     <fieldset className="step">
       <legend className="step__legend">Where and how you'll ride</legend>
-      <FormSelectField
+      <FormComboBoxField
         control={control}
         name="eligibility.city"
         label="City"
         options={cityOptions}
-        placeholder="Select your city…"
+        placeholder="Search your city…"
+        emptyMessage="No city matches your search"
       />
       <FormSelectField
         control={control}

@@ -48,7 +48,7 @@ export class OnboardingFormService {
 
     try {
       const result = await onboardingApi.submitApplication(
-        NEW_APPLICATION_ID,
+        NEW_APPLICATION_ID, //спросить почему тут id передавать надо. у нас же новая заявка
         payload,
       )
 

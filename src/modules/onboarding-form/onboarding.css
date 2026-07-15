@@ -1,4 +1,12 @@
+@import '../../ui/variables.css';
+
 .onboarding {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-e, 1.5rem);
+}
+
+.onboarding__header {
   display: flex;
   flex-direction: column;
   gap: var(--dt-spacing-e, 1.5rem);
@@ -18,6 +26,42 @@
 
 .onboarding__nav > :first-child:not(:only-child) {
   margin-inline-end: auto;
+}
+
+@media (--mobile) {
+  .onboarding {
+    flex: 1;
+  }
+
+  .onboarding__header {
+    margin-inline: calc(-1 * var(--dt-spacing-d, 1rem));
+    padding: var(--dt-spacing-e, 1.5rem) var(--dt-spacing-d, 1rem);
+    background: var(--dt-color-background-default);
+  }
+
+  .onboarding__body {
+    position: relative;
+    flex: 1;
+    margin-inline: calc(-1 * var(--dt-spacing-d, 1rem));
+    margin-block-start: -1.5rem;
+    padding: var(--dt-spacing-e, 1.5rem) var(--dt-spacing-d, 1rem) 5rem;
+    background: color-mix(
+      in srgb,
+      var(--dt-color-black, #000) 60%,
+      var(--dt-color-container-default, #2b2a28)
+    );
+    border-radius: var(--dt-radius-f, 24px) var(--dt-radius-f, 24px) 0 0;
+  }
+
+  .onboarding__nav {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    margin-block-start: 0;
+    padding: var(--dt-spacing-e, 1.5rem);
+    padding-bottom: calc(var(--dt-spacing-e, 1.5rem) + env(safe-area-inset-bottom));
+    background: var(--dt-color-container-default, #fff);
+  }
 }
 
 .onboarding__status,

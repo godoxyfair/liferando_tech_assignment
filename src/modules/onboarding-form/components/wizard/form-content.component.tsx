@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { PieButton } from '@justeattakeaway/pie-webc/react/button'
 import { PieNotification } from '@justeattakeaway/pie-webc/react/notification'
 import { Stepper, useStepper } from '@/ui/stepper'
+import { StepTransition } from '@/ui/step-transition'
 import { SubmitStatus } from '../../store/onboarding.store'
 import { STEP_LABELS } from '../../onboarding.constants'
 import type { OnboardingFormValues } from '../../onboarding.form-model'
@@ -17,16 +18,24 @@ const STEP_SECTIONS = ['personal', 'eligibility', 'documents'] as const
 export function FormContent({ config }: WizardProps) {
   const { step, isFirst, isLast, maxReached, next, back } = useStepper()
   const { trigger, formState } = useFormContext<OnboardingFormValues>()
+  const completedSteps = STEP_LABELS.map((_, index) => {
+    const section = STEP_SECTIONS[index]
+
+    return index < maxReached && (!section || !formState.errors[section])
+  })
+
+  const invalidSteps = STEP_LABELS.map((_, index) => {
+    const section = STEP_SECTIONS[index]
+
+    return index <= maxReached && !!section && !!formState.errors[section]
+  })
+
   const {
     onSubmit,
     status: submitStatus,
     error: submitError,
     applicationId,
   } = useOnboardingSubmit(config)
-
-  if (submitStatus === SubmitStatus.Submitted && applicationId) {
-    return <OnboardingSuccess applicationId={applicationId} />
-  }
 
   const goToNextStep = async () => {
     const stepFields = STEP_FIELDS[step]
@@ -35,10 +44,6 @@ export function FormContent({ config }: WizardProps) {
       next()
     }
   }
-
-  const completedSteps = STEP_SECTIONS.map(
-    (section, index) => index < maxReached && !formState.errors[section],
-  )
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
@@ -51,23 +56,37 @@ export function FormContent({ config }: WizardProps) {
 
   const isSubmitting = submitStatus === SubmitStatus.Submitting
 
+  if (submitStatus === SubmitStatus.Submitted && applicationId) {
+    return <OnboardingSuccess applicationId={applicationId} />
+  }
+
   return (
     <form className="onboarding" onSubmit={handleSubmit} noValidate>
-      <h1 className="onboarding__title">Courier onboarding</h1>
+      <header className="onboarding__header">
+        <h1 className="onboarding__title">Courier onboarding</h1>
 
-      <Stepper labels={[...STEP_LABELS]} completed={completedSteps} />
+        <Stepper
+          labels={[...STEP_LABELS]}
+          completed={completedSteps}
+          invalid={invalidSteps}
+        />
+      </header>
 
-      {submitError && (
-        <PieNotification
-          variant="error"
-          isOpen
-          heading="We couldn't submit your application"
-        >
-          {submitError}
-        </PieNotification>
-      )}
+      <div className="onboarding__body">
+        {submitError && (
+          <PieNotification
+            variant="error"
+            isOpen
+            heading="We couldn't submit your application"
+          >
+            {submitError}
+          </PieNotification>
+        )}
 
-      <OnboardingSteps config={config} />
+        <StepTransition stepKey={step}>
+          <OnboardingSteps config={config} />
+        </StepTransition>
+      </div>
 
       <div className="onboarding__nav">
         {!isFirst && (
