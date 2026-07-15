@@ -42,6 +42,12 @@ export function ComboBoxControl({
 
   const errorId = error ? `${id}-error` : undefined
 
+  const resultsAnnouncement = !query.trim()
+    ? ''
+    : filteredOptions.length === 0
+      ? emptyMessage
+      : `${filteredOptions.length} options available`
+
   return (
     <>
       <Combobox
@@ -80,7 +86,13 @@ export function ComboBoxControl({
             modal={false}
           >
             {filteredOptions.length === 0 ? (
-              <div className="combobox__empty">{emptyMessage}</div>
+              <ComboboxOption
+                value={null}
+                disabled
+                className="combobox__option combobox__empty"
+              >
+                {emptyMessage}
+              </ComboboxOption>
             ) : (
               ({ option }: { option: SelectOption }) => (
                 <ComboboxOption
@@ -95,6 +107,9 @@ export function ComboBoxControl({
           </ComboboxOptions>
         </div>
       </Combobox>
+      <span className="sr-only" role="status">
+        {resultsAnnouncement}
+      </span>
       {error && (
         <PieAssistiveText id={errorId} variant="error" message={error} />
       )}

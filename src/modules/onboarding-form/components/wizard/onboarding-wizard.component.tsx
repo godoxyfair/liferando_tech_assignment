@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import type { Resolver } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { StepperProvider } from '@/ui/stepper'
 import { STEP_COUNT, Step } from '../../onboarding.constants'
@@ -18,10 +17,7 @@ export function OnboardingWizard({
   resumeError,
 }: WizardProps) {
   const schema = useMemo(() => buildOnboardingSchema(config), [config])
-  const resolver = useMemo(
-    () => yupResolver(schema) as Resolver<OnboardingFormValues>,
-    [schema],
-  )
+  const resolver = useMemo(() => yupResolver(schema), [schema])
 
   const defaultValues = useMemo(
     () =>

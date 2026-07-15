@@ -101,6 +101,10 @@ export function FormContent({ config, resumeError }: WizardProps) {
       </header>
 
       <div className="onboarding__body">
+        <div className="sr-only" role="alert">
+          {submitError}
+        </div>
+
         {resumeError && (
           <PieNotification
             variant="warning"
@@ -142,6 +146,7 @@ export function FormContent({ config, resumeError }: WizardProps) {
           variant="primary"
           isLoading={isSubmitting}
           disabled={isSubmitting}
+          aria={isSubmitting ? { label: 'Submitting application…' } : undefined}
         >
           {isLast ? 'Submit application' : 'Continue'}
         </PieButton>

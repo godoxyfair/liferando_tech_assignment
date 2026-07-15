@@ -29,7 +29,7 @@ function ageFrom(dateOfBirth: string): number {
 function documentEntrySchema(isRequired: boolean) {
   const number = isRequired
     ? yup.string().trim().required('Please enter this document number.')
-    : yup.string().trim()
+    : yup.string().trim().defined()
 
   return yup.object({ number })
 }
@@ -58,7 +58,9 @@ function documentsSchema(config: OnboardingConfig) {
     )
 }
 
-export function buildOnboardingSchema(config: OnboardingConfig) {
+export function buildOnboardingSchema(
+  config: OnboardingConfig,
+): yup.ObjectSchema<OnboardingFormValues> {
   const vehicleIds = config.vehicleTypes.map((vehicle) => vehicle.id)
 
   return yup.object({
