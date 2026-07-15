@@ -39,7 +39,6 @@ export interface OnboardingState {
   setApplicationId: (id: string) => void
   setResumeStatus: (status: ResumeStatus, error?: string | null) => void
   setPrefillApplication: (application: OnboardingApplication) => void
-  reset: () => void
 }
 
 const createInitialState = () => ({
@@ -77,6 +76,4 @@ export const onboardingStore = createStore<OnboardingState>()((set) => ({
       resumeStatus: ResumeStatus.Ready,
       resumeError: null,
     }),
-
-  reset: () => set(createInitialState()),
 }))

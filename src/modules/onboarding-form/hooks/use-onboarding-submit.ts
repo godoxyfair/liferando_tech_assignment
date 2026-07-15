@@ -84,7 +84,7 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
       goTo(invalidSectionIndex)
     }
 
-    onboardingFormService.noteValidationError()
+    onboardingFormService.clearSubmitError()
   }
 
   return {

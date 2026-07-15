@@ -1,4 +1,4 @@
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
 import { PieTextInput } from '@justeattakeaway/pie-webc/react/text-input'
 import { readControlValue } from './utils/field.util'
@@ -16,6 +16,8 @@ export function FormTextField<TFieldValues extends FieldValues>({
   inputmode,
   placeholder,
 }: FormTextFieldProps<TFieldValues>) {
+  const { trigger } = useFormContext<TFieldValues>()
+
   return (
     <div className="field">
       <label className="field__label" htmlFor={id}>
@@ -40,7 +42,13 @@ export function FormTextField<TFieldValues extends FieldValues>({
             placeholder={placeholder}
             status={fieldState.error ? 'error' : 'default'}
             assistiveText={fieldState.error?.message}
-            onChange={(event) => field.onChange(readControlValue(event))}
+            onChange={(event) => {
+              field.onChange(readControlValue(event))
+
+              if (fieldState.error) {
+                void trigger(name)
+              }
+            }}
             onBlur={field.onBlur}
           />
         )}

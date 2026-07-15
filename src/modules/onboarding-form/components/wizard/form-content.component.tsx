@@ -14,8 +14,9 @@ import { OnboardingSuccess } from '../onboarding-feedback.component'
 import type { WizardProps } from './onboarding-wizard.types'
 
 export function FormContent({ config, resumeError }: WizardProps) {
-  const { step, isFirst, isLast, maxReached, next, back } = useStepper()
+  const { step, isFirst, isLast, maxReached, next, back, goTo } = useStepper()
   const { trigger, formState } = useFormContext<OnboardingFormValues>()
+
   const completedSteps = STEP_LABELS.map((_, index) => {
     const section = STEP_SECTIONS[index]
 
@@ -43,6 +44,34 @@ export function FormContent({ config, resumeError }: WizardProps) {
     }
   }
 
+  const goForwardTo = async (targetStep: number) => {
+    for (let stepIndex = step; stepIndex < targetStep; stepIndex++) {
+      const isStepValid = await trigger(STEP_FIELDS[stepIndex], {
+        shouldFocus: true,
+      })
+
+      if (!isStepValid) {
+        if (stepIndex !== step) {
+          goTo(stepIndex)
+        }
+
+        return
+      }
+    }
+
+    goTo(targetStep)
+  }
+
+  const selectStep = (targetStep: number) => {
+    if (targetStep <= step) {
+      goTo(targetStep)
+
+      return
+    }
+
+    void goForwardTo(targetStep)
+  }
+
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault()
     if (isLast) {
@@ -67,6 +96,7 @@ export function FormContent({ config, resumeError }: WizardProps) {
           labels={[...STEP_LABELS]}
           completed={completedSteps}
           invalid={invalidSteps}
+          onStepSelect={selectStep}
         />
       </header>
 

@@ -106,10 +106,7 @@ export class OnboardingFormService {
         const fieldErrors = error.response?.data?.errors
 
         if (fieldErrors?.length) {
-          setSubmitStatus(
-            SubmitStatus.Error,
-            'Please fix the highlighted fields and try again.',
-          )
+          setSubmitStatus(SubmitStatus.Error)
 
           return { status: 'field-error', errors: fieldErrors }
         }
@@ -132,20 +129,8 @@ export class OnboardingFormService {
     }
   }
 
-  noteValidationError(): void {
-    this.store
-      .getState()
-      .setSubmitStatus(
-        SubmitStatus.Error,
-        'Please complete the highlighted fields.',
-      )
-  }
-
-  reset(): void {
-    this.configController?.abort()
-    this.submitController?.abort()
-    this.resumeController?.abort()
-    this.store.getState().reset()
+  clearSubmitError(): void {
+    this.store.getState().setSubmitStatus(SubmitStatus.Idle)
   }
 }
 

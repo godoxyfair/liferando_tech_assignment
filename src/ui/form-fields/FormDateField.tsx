@@ -1,4 +1,4 @@
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import type { FieldValues } from 'react-hook-form'
 import { PieAssistiveText } from '@justeattakeaway/pie-webc/react/assistive-text'
 import { fieldControlId } from './field.utils'
@@ -12,6 +12,7 @@ export function FormDateField<TFieldValues extends FieldValues>({
   id = fieldControlId(name),
   autocomplete,
 }: FormDateFieldProps<TFieldValues>) {
+  const { trigger } = useFormContext<TFieldValues>()
   const errorId = `${id}-error`
 
   return (
@@ -34,7 +35,13 @@ export function FormDateField<TFieldValues extends FieldValues>({
             autoComplete={autocomplete}
             aria-invalid={fieldState.error ? true : undefined}
             aria-describedby={fieldState.error ? errorId : undefined}
-            onChange={(event) => field.onChange(event.target.value)}
+            onChange={(event) => {
+              field.onChange(event.target.value)
+
+              if (fieldState.error) {
+                void trigger(name)
+              }
+            }}
             onBlur={field.onBlur}
           />
           {fieldState.error && (

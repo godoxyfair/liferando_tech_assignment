@@ -9,9 +9,11 @@ export function Stepper({
   labels,
   completed = [],
   invalid = [],
+  onStepSelect,
 }: StepperProps) {
   const { step, canGoTo, goTo } = useStepper()
   const isMobile = useIsMobile()
+  const selectStep = onStepSelect ?? goTo
 
   if (isMobile) {
     const nextLabel = step < labels.length - 1 ? labels[step + 1] : undefined
@@ -58,7 +60,7 @@ export function Stepper({
                 data-status={invalid[index] ? 'error' : undefined}
                 aria-current={isActive ? 'step' : undefined}
                 disabled={!reachable}
-                onClick={() => goTo(index)}
+                onClick={() => selectStep(index)}
               >
                 <span className="stepper__marker" aria-hidden="true">
                   {isDone ? '✓' : index + 1}

@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { useStore } from '@/utils/useStore'
 import { onboardingFormService } from './service/onboarding.form-service'
 import { ConfigStatus, ResumeStatus } from './store/onboarding.store'
-import { RESUME_APPLICATION_ID } from './onboarding.constants'
 import { OnboardingWizard } from './components/wizard/onboarding-wizard.component'
 import {
   ConfigError,
@@ -20,15 +19,21 @@ export function OnboardingForm() {
     prefillApplication,
   } = useStore(onboardingFormService.store)
 
+  const resumeApplicationId = new URLSearchParams(window.location.search).get(
+    'resume',
+  )
+
   useEffect(() => {
     void onboardingFormService.loadConfig()
-    void onboardingFormService.loadResume(RESUME_APPLICATION_ID)
-  }, [])
+
+    if (resumeApplicationId) {
+      void onboardingFormService.loadResume(resumeApplicationId)
+    }
+  }, [resumeApplicationId])
 
   if (
     configStatus === ConfigStatus.Idle ||
     configStatus === ConfigStatus.Loading ||
-    resumeStatus === ResumeStatus.Idle ||
     resumeStatus === ResumeStatus.Loading
   ) {
     return <OnboardingLoading />
