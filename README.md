@@ -2,6 +2,8 @@
 
 Courier onboarding exercise. React + TypeScript + Vite.
 
+![Wizard steps on iPhone](public/iphone_screens_row.png)
+
 ## Tech choices
 
 A wizard has three kinds of state, and each lives in its own place.
