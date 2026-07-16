@@ -63,7 +63,6 @@
     margin-inline: calc(-1 * var(--dt-spacing-d));
     padding: var(--dt-spacing-d);
     padding-bottom: calc(var(--dt-spacing-d) + env(safe-area-inset-bottom));
-    background: var(--dt-color-container-default);
   }
 }
 
