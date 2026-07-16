@@ -4,29 +4,69 @@ Courier onboarding exercise. React + TypeScript + Vite.
 
 ## Tech choices
 
-A wizard has two kinds of state. There is the form you are filling in right now,
-and there is the whole application that has to survive while you move between
-steps. I keep those two things separate.
+A wizard has three kinds of state, and each lives in its own place.
 
-**React Hook Form** runs each step's form. It is the usual choice for forms in
-React and it handles the fiddly parts for me: validation, tracking which fields
-were touched, keeping renders cheap, and moving focus to the first error. It
-also lets me set an error on a field by its name, which fits this task well,
-because the server replies with names like `documents.drivers_license.number`
-that point straight at a field.
+**React Hook Form** owns the form values for all steps. One `useForm` sits
+above the steps and stays mounted while you navigate, so nothing you typed is
+ever lost — moving between steps, failing validation, or getting a 503 on
+submit all leave your input intact (retry is just pressing the button again).
+RHF also lets me set an error on a field by its name, which fits this task
+well, because the server replies with names like
+`documents.drivers_license.number`
 
-**Zustand** holds everything that lives above a single step: the data from all
-three steps, the step you are on, and the submit status. I like it here because
-it is a global store with almost no setup and no providers to wrap the app in.
-Keeping this state outside the form is what makes two things simple. When the
-server returns a 503 the user can just retry and nothing is lost, and resuming a
-saved application is only a matter of filling the store and jumping to the first
-unfinished step. Redux would be too much for this. Zustand is the right size.
+**Zustand** holds the async lifecycle: config loading, resume loading, submit status. Components
+only read statuses; the fetching itself lives in a service class
+(`onboarding.form-service.ts`) that writes results into the store. Redux would
+be too much for this. Zustand is the right size.
 
-**Yup** (through `@hookform/resolvers`) says what a valid step looks like:
-required fields, a real email, at least 18 years old. The rules live in a schema
-instead of inside the components, and the document step builds its schema from the
-vehicle you picked, so the validation always matches what is on screen.
+**A per-provider stepper store** owns navigation. The current step and the
+furthest step reached. Steps you have visited stay clickable in the header,
+steps ahead stay locked.
+
+**Yup** says what a valid step looks like: required fields, a real email, at least 18 years old. The rules live in a schema instead of inside the components, and the document step builds its schema from the vehicle you picked, so the validation always matches what is on screen.
+
+## Decisions and tradeoffs
+
+- **Documents are config-driven.** Step 3 renders exactly the chosen vehicle's
+  `requiredDocuments` from `/onboarding/config`. The form model keeps a slot
+  for every known document type, so a number entered for the shared
+  `id_document` survives switching
+
+- **Server errors map to fields, not banners.**
+  `mapServerErrorToStep()` turns a dot-path like `personal.email` into a step.
+  On 422/409 every error lands on its field via `setError`, the wizard
+  navigates to the earliest affected step and focuses the first errored field.
+  The notification banner is reserved for 503/network failures, where the fix
+  is retrying with all input preserved.
+
+- **City list** The city field is a Headless UI combobox in
+  virtual mode: only visible options render, so filtering and typing stay
+  smooth.
+
+- **Accessibility.** Native `<label htmlFor>` on every control, errors
+  announced via `role="alert"` and tied to inputs with `aria-describedby`,
+  focus moves to the step container on navigation and to the first invalid
+  field on failed validation or server errors, the stepper exposes
+  current/completed/invalid state to screen readers, and animations respect
+  `prefers-reduced-motion`. I hope thats covered almost all cases.
+
+- **Resume.** Open `/?resume=resume-demo` to fetch the saved
+  application, prefill the wizard and land on the first incomplete step. If the fetch fails you get a warning.
+
+## Tests
+
+Wrote unit test and integrations, no e2e it's no neded for this app
+
+```bash
+npm run test:run
+```
+
+Three integration tests cover the parts that carry real logic: the
+config-driven document step, including the shared `id_document` number
+surviving a vehicle change, step validation blocking Continue plus the age-18
+rule, and a 422 dot-path error landing on the right field on the right step
+with focus. Pure helpers `mapServerErrorToStep`, the schema, the payload
+builder and the stepper store have their own unit tests.
 
 ## Requirements
 
@@ -95,6 +135,13 @@ Format all files with Prettier:
 npm run format
 ```
 
+Run tests once
+
+```bash
+npm run test:run
+npm run test
+```
+
 Check formatting without writing:
 
 ```bash
@@ -113,7 +160,7 @@ node public/server.mjs
 Endpoints:
 
 - `GET  /onboarding/config`
-- `GET  /onboarding/applications/:id` (try id `resume-demo`)
+- `GET  /onboarding/applications/:id` (try id `resume-demo`, used by `/?resume=resume-demo`)
 - `POST /onboarding/applications/:id/submit`
 
 The Vite dev server proxies `/api/*` to this mock (see `vite.config.ts`), so from
@@ -129,13 +176,12 @@ import App from '@/App'
 
 ## Setup config
 
-### Why both Oxlint and ESLint
+### Oxlint and ESLint
 
-We use Oxlint for speed and ESLint for depth, not the same job twice.
+So I worked primary with eslint and here I tried to combine two
+tools.
 
-Oxlint is super fast, so it's great for the quick checks while you code (on-save,
-pre-commit). ESLint is slower but understands TypeScript types, so it catches
-things Oxlint can't yet (like unhandled promises).We lean on it in CI.
+We use Oxlint for speed and ESLint for depth, not the same job twice. Oxlint is super fast, so it's great for the quick checks while you code (on-save, pre-commit). ESLint is slower but understands TypeScript types, so it catches things Oxlint can't yet (like unhandled promises).We lean on it in CI.
 
 `eslint-plugin-oxlint` turns off the ESLint rules Oxlint already handles, so
 nothing runs twice. Prettier owns formatting (`eslint-config-prettier` is last,
