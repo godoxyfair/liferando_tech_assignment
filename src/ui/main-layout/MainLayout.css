@@ -1,0 +1,37 @@
+@import '../variables.css';
+
+.main-layout {
+  --layout-gutter: 1fr;
+  --layout-content-max-width: 45rem;
+
+  display: grid;
+  grid-template-columns: var(--layout-gutter) minmax(0, 3fr) var(
+      --layout-gutter
+    );
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+.main-layout__content {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  grid-column: 2;
+  width: 100%;
+  max-width: var(--layout-content-max-width);
+  margin-inline: auto;
+  padding-block: var(--dt-spacing-f);
+}
+
+@media (--mobile) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .main-layout__content {
+    margin: initial;
+    grid-column: 1;
+    padding-inline: var(--dt-spacing-d);
+    padding-block: var(--dt-spacing-e);
+  }
+}

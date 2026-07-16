@@ -2,10 +2,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { fileURLToPath } from 'node:url'
+import browserslist from 'browserslist'
+import { browserslistToTargets } from 'lightningcss'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  css: {
+    transformer: 'lightningcss',
+    lightningcss: {
+      drafts: { customMedia: true },
+      targets: browserslistToTargets(browserslist()),
+    },
+  },
+  build: {
+    cssMinify: 'lightningcss',
+    cssTarget: ['chrome61', 'edge79', 'firefox60', 'safari12'],
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

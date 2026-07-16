@@ -1,0 +1,17 @@
+.summary-description {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--dt-spacing-b) var(--dt-spacing-d);
+  margin: 0;
+  font-size: calc(var(--dt-font-body-l-size) * 1px);
+  line-height: calc(var(--dt-font-body-l-line-height) * 1px);
+}
+
+.summary-description__term {
+  color: var(--dt-color-content-subdued);
+}
+
+.summary-description__description {
+  margin: 0;
+  font-weight: 600;
+}

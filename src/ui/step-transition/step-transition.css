@@ -1,0 +1,30 @@
+@keyframes step-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.step-transition {
+  animation: step-transition-fade-in 1000ms ease;
+}
+
+.step-transition:focus {
+  outline: none;
+}
+
+.step-transition:focus-visible {
+  outline: none;
+  border-radius: var(--dt-radius-rounded-c);
+  box-shadow:
+    0 0 0 2px var(--dt-color-focus-inner),
+    0 0 0 4px var(--dt-color-focus-outer);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-transition {
+    animation: none;
+  }
+}

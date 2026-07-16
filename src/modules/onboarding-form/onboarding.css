@@ -1,0 +1,76 @@
+@import '../../ui/variables.css';
+
+.onboarding {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-e);
+}
+
+.onboarding__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-e);
+}
+
+.onboarding__title {
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.onboarding__title:focus {
+  outline: none;
+}
+
+.onboarding__body pie-notification {
+  display: block;
+  margin-block-end: var(--dt-spacing-d);
+}
+
+.onboarding__nav {
+  display: flex;
+  gap: var(--dt-spacing-c);
+  justify-content: flex-end;
+  margin-block-start: var(--dt-spacing-d);
+}
+
+.onboarding__nav > :first-child:not(:only-child) {
+  margin-inline-end: auto;
+}
+
+@media (--mobile) {
+  .onboarding {
+    flex: 1;
+  }
+
+  .onboarding__header {
+    margin-inline: calc(-1 * var(--dt-spacing-d));
+    padding: var(--dt-spacing-e) var(--dt-spacing-d);
+    background: var(--dt-color-background-default);
+  }
+
+  .onboarding__body {
+    position: relative;
+    flex: 1;
+    margin-inline: calc(-1 * var(--dt-spacing-d));
+    margin-block-start: -1.5rem;
+    padding: var(--dt-spacing-e) var(--dt-spacing-d);
+    background: var(--dt-color-container-subtle);
+    border-radius: var(--dt-radius-rounded-g) var(--dt-radius-rounded-g) 0 0;
+  }
+
+  .onboarding__nav {
+    margin-block-start: 0;
+    margin-inline: calc(-1 * var(--dt-spacing-d));
+    padding: var(--dt-spacing-d);
+    padding-bottom: calc(var(--dt-spacing-d) + env(safe-area-inset-bottom));
+    background: var(--dt-color-container-default);
+  }
+}
+
+.onboarding__status,
+.onboarding__success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dt-spacing-d);
+  align-items: flex-start;
+}

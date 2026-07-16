@@ -1,17 +1,7 @@
-import { useState } from 'react'
-import './App.css'
+import { OnboardingPage } from '@/pages/onboarding-page/onboarding-page.component'
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <section id="center"></section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+  return <OnboardingPage />
 }
 
 export default App
