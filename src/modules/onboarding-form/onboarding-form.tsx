@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useStore } from '@/utils/useStore'
+import { useStore } from 'zustand'
 import { onboardingFormService } from './service/onboarding.form-service'
 import { ConfigStatus, ResumeStatus } from './store/onboarding.store'
 import { OnboardingWizard } from './components/wizard/onboarding-wizard.component'

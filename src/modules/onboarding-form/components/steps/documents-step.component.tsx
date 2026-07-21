@@ -36,7 +36,7 @@ export function DocumentsStep({ config }: DocumentsStepProps) {
           control={control}
           key={documentType}
           name={`documents.${documentType}.number`}
-          label={`${config.documents[documentType].label} number`}
+          label={`${config.documents[documentType]?.label ?? documentType} number`}
         />
       ))}
     </fieldset>

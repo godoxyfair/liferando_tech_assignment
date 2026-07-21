@@ -27,6 +27,9 @@ export function Stepper({
         </span>
         <span className="stepper__mobile-info">
           <span className="stepper__mobile-title">
+            <span className="stepper__sr">
+              Step {step + 1} of {labels.length}:{' '}
+            </span>
             {labels[step]}
             {invalid[step] && (
               <span className="stepper__sr"> (has an error)</span>
