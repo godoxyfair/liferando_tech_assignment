@@ -43,6 +43,7 @@ export function OnboardingWizard({
       <StepperProvider count={STEP_COUNT} initialStep={initialStep}>
         <FormContent
           config={config}
+          schema={schema}
           prefillApplication={prefillApplication}
           resumeError={resumeError}
         />

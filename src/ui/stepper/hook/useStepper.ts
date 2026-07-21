@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useStore } from '@/utils/useStore'
+import { useStore } from 'zustand'
 import { StepperContext } from '../store/stepper.context'
 import { canReachStep } from '../store/stepper.store'
 

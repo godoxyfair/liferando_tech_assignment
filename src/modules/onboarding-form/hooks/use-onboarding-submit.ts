@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import type { FieldErrors, Path } from 'react-hook-form'
-import { useStore } from '@/utils/useStore'
+import { useStore } from 'zustand'
+import { useShallow } from 'zustand/react/shallow'
 import { useStepper } from '@/ui/stepper'
 import { onboardingFormService } from '../service/onboarding.form-service'
 import { SubmitStatus } from '../store/onboarding.store'
@@ -20,6 +21,11 @@ export function useOnboardingSubmit(config: OnboardingConfig) {
 
   const { submitStatus, submitError, applicationId } = useStore(
     onboardingFormService.store,
+    useShallow((state) => ({
+      submitStatus: state.submitStatus,
+      submitError: state.submitError,
+      applicationId: state.applicationId,
+    })),
   )
 
   const pendingFocusField = useRef<Path<OnboardingFormValues> | null>(null)

@@ -30,7 +30,7 @@ export function buildSummaryItems(
     { term: 'City', description: eligibility?.city },
     { term: 'Vehicle type', description: vehicleLabel },
     ...requiredDocuments.map((documentType) => ({
-      term: config.documents[documentType].label,
+      term: config.documents[documentType]?.label ?? documentType,
       description: documents?.[documentType]?.number,
     })),
   ]

@@ -1,56 +1,35 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { PieButton } from '@justeattakeaway/pie-webc/react/button'
 import { PieNotification } from '@justeattakeaway/pie-webc/react/notification'
-import { Stepper, useStepper } from '@/ui/stepper'
+import { useStepper } from '@/ui/stepper'
 import { StepTransition } from '@/ui/step-transition'
 import { SubmitStatus } from '../../store/onboarding.store'
-import { STEP_LABELS } from '../../onboarding.constants'
 import type { OnboardingFormValues } from '../../onboarding.form-model'
-import {
-  STEP_FIELDS,
-  STEP_SECTIONS,
-  buildOnboardingSchema,
-} from '../../validation'
-import { incompleteSteps } from '../../utils/errors'
+import { STEP_FIELDS } from '../../validation'
+import type { OnboardingSchema } from '../../validation'
 import { useOnboardingSubmit } from '../../hooks/use-onboarding-submit'
 import { OnboardingSteps } from '../onboarding-steps.component'
 import { OnboardingSuccess } from '../onboarding-feedback.component'
+import { StepperProgress } from './stepper-progress.component'
 import type { WizardProps } from './onboarding-wizard.types'
+
+interface FormContentProps extends WizardProps {
+  schema: OnboardingSchema
+}
 
 export function FormContent({
   config,
+  schema,
   prefillApplication,
   resumeError,
-}: WizardProps) {
-  const { step, isFirst, isLast, maxReached, next, back } = useStepper()
-  const { trigger, formState } = useFormContext<OnboardingFormValues>()
+}: FormContentProps) {
+  const { step, isFirst, isLast, next, back } = useStepper()
+  const { trigger } = useFormContext<OnboardingFormValues>()
   const [showResumeNotice, setShowResumeNotice] = useState(
     Boolean(prefillApplication),
   )
-
-  const formValues = useWatch<OnboardingFormValues>()
-  const schema = useMemo(() => buildOnboardingSchema(config), [config])
-  const incomplete = useMemo(
-    () => incompleteSteps(schema, formValues as OnboardingFormValues),
-    [schema, formValues],
-  )
-
-  const completedSteps = STEP_LABELS.map((_, index) => {
-    const section = STEP_SECTIONS[index]
-
-    return (
-      index < maxReached &&
-      (!section || (!incomplete.has(index) && !formState.errors[section]))
-    )
-  })
-
-  const invalidSteps = STEP_LABELS.map((_, index) => {
-    const section = STEP_SECTIONS[index]
-
-    return index <= maxReached && !!section && !!formState.errors[section]
-  })
 
   const {
     onSubmit,
@@ -88,11 +67,7 @@ export function FormContent({
       <header className="onboarding__header">
         <h1 className="onboarding__title">Courier onboarding</h1>
 
-        <Stepper
-          labels={[...STEP_LABELS]}
-          completed={completedSteps}
-          invalid={invalidSteps}
-        />
+        <StepperProgress schema={schema} />
       </header>
 
       <div className="onboarding__body">
